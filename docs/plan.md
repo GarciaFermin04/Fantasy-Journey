@@ -14,7 +14,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 ## Etapa 1: Exploración base (~25 h)
 **Lista cuando:** movés un sprite por una sala 3D de cubos con cámara estilo HeartGold y podés interactuar con un objeto.
 
-- [ ] **1.1 Sala greybox** — Piso y paredes con cubos (CSGBox3D). Nada de arte todavía.
+- [x] **1.1 Sala greybox** — Piso y paredes con cubos (CSGBox3D). Nada de arte todavía.
 - [ ] **1.2 Personaje sprite billboard** — Sprite3D con un rectángulo de color. Se reemplaza cuando haya arte.
 - [ ] **1.3 Movimiento con teclado** — 8 direcciones y colisiones con paredes.
 - [ ] **1.4 Cámara fija inclinada** — Vista picada que sigue al líder, sin rotación libre. Es la base del estilo HeartGold/Platino.
