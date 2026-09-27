@@ -1,0 +1,15 @@
+# Godot 4
+.godot/
+/android/
+*.tmp
+builds/
+
+# Copias temporales de GDExtensions que Godot crea en Windows al cargarlas
+~*.dll
+
+# Exportaciones
+export_credentials.cfg
+
+# SO
+.DS_Store
+Thumbs.db
