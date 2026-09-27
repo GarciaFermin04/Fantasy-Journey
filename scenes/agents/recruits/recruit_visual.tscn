@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://h50mmygk8whb"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/recruits/placeholder_recruit.tres" id="1_bjqlv"]
+
+[node name="RecruitVisual" type="Node3D" unique_id=315995430]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=327594809]
+offset = Vector2(0, 32)
+pixel_size = 0.025
+billboard = 2
+alpha_cut = 1
+texture = ExtResource("1_bjqlv")

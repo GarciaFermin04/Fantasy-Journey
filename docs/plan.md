@@ -15,7 +15,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 **Lista cuando:** movés un sprite por una sala 3D de cubos con cámara estilo HeartGold y podés interactuar con un objeto.
 
 - [x] **1.1 Sala greybox** — Piso y paredes con cubos (CSGBox3D). Nada de arte todavía.
-- [ ] **1.2 Personaje sprite billboard** — Sprite3D con un rectángulo de color. Se reemplaza cuando haya arte.
+- [x] **1.2 Personaje sprite billboard** — Sprite3D con un rectángulo de color. Se reemplaza cuando haya arte.
 - [ ] **1.3 Movimiento con teclado** — 8 direcciones y colisiones con paredes.
 - [ ] **1.4 Cámara fija inclinada** — Vista picada que sigue al líder, sin rotación libre. Es la base del estilo HeartGold/Platino.
 - [ ] **1.5 Party que sigue al líder** — Los otros 2 reclutas caminan detrás. Si complica, mostrar solo al líder por ahora.

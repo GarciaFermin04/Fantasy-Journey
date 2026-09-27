@@ -3,6 +3,7 @@
 [ext_resource type="Material" uid="uid://y6qx8g4iwlk1" path="res://assets/materials/greybox_floor.tres" id="1_0pxwn"]
 [ext_resource type="Material" uid="uid://b7vd1qksv45jj" path="res://assets/materials/greybox_wall.tres" id="2_bdhnp"]
 [ext_resource type="Material" uid="uid://d3wfk7awrmd1b" path="res://assets/materials/greybox_obstacle.tres" id="3_ohcq1"]
+[ext_resource type="PackedScene" uid="uid://dler7c2hsbdac" path="res://scenes/agents/party/party_leader.tscn" id="4_bdhnp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5xg5r"]
 
@@ -71,3 +72,6 @@ current = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=460378261]
 environment = SubResource("Environment_a1sms")
+
+[node name="PartyLeader" parent="." unique_id=1469255191 instance=ExtResource("4_bdhnp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
