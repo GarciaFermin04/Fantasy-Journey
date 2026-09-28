@@ -51,3 +51,24 @@ func test_changing_combatant_stats_does_not_touch_data() -> void:
 
 func test_new_combatant_is_not_defeated() -> void:
 	assert_false(Combatant.from_enemy(_make_enemy(6), 0).is_defeated)
+
+
+func test_from_recruit_uses_preferred_row_and_equipped_skills() -> void:
+	var recruit := _make_recruit(10)
+	var skill := SkillData.new()
+	recruit.preferred_row = CombatRow.Row.BACK
+	recruit.default_equipped_skills = [skill]
+	var combatant := Combatant.from_recruit(recruit, null, 0)
+	assert_eq(combatant.row, CombatRow.Row.BACK)
+	assert_eq(combatant.skills, [skill] as Array[SkillData])
+
+
+func test_from_enemy_uses_preferred_row_and_skills() -> void:
+	var enemy := _make_enemy(6)
+	var entry := EnemySkillEntry.new()
+	entry.skill = SkillData.new()
+	enemy.skills = [entry]
+	enemy.preferred_row = CombatRow.Row.BACK
+	var combatant := Combatant.from_enemy(enemy, 0)
+	assert_eq(combatant.row, CombatRow.Row.BACK)
+	assert_eq(combatant.skills, [entry.skill] as Array[SkillData])

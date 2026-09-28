@@ -1,6 +1,7 @@
 extends Control
-## Debug scene to try the turn queue, the combat state machine and the turn
-## order bar with the starting recruits and the test enemies.
+## Debug scene to try the turn queue, the combat state machine, formations,
+## valid targets and the turn order bar with the starting recruits and the
+## test enemies.
 
 const RECRUIT_PATHS: Array[String] = [
 	"res://data/recruits/warrior.tres",
@@ -15,15 +16,21 @@ const ENEMY_PATHS: Array[String] = [
 
 ## Speed removed by the "Bajar velocidad" button.
 @export var slow_amount: int = 5
+## Maximum allied units per row.
+@export var ally_row_capacity: int = 3
 
 var _queue := TurnQueue.new()
 var _machine := CombatStateMachine.new()
 var _combatants: Array[Combatant] = []
+var _allies: Formation
+var _enemies := Formation.new()
 
 @onready var _bar: TurnOrderBar = %TurnOrderBar
 @onready var _round_label: Label = %RoundLabel
 @onready var _state_label: Label = %StateLabel
 @onready var _speeds_label: Label = %SpeedsLabel
+@onready var _formation_label: Label = %FormationLabel
+@onready var _targets_label: Label = %TargetsLabel
 @onready var _next_turn_button: Button = %NextTurnButton
 @onready var _defeat_button: Button = %DefeatButton
 @onready var _slow_button: Button = %SlowButton
@@ -42,11 +49,16 @@ func _ready() -> void:
 
 
 func _build_combatants() -> void:
+	_allies = Formation.new(ally_row_capacity)
 	for i in RECRUIT_PATHS.size():
 		var recruit := load(RECRUIT_PATHS[i]) as RecruitData
-		_combatants.append(Combatant.from_recruit(recruit, recruit.default_weapon, i))
+		var ally := Combatant.from_recruit(recruit, recruit.default_weapon, i)
+		_combatants.append(ally)
+		_allies.add(ally)
 	for i in ENEMY_PATHS.size():
-		_combatants.append(Combatant.from_enemy(load(ENEMY_PATHS[i]) as EnemyData, i))
+		var enemy := Combatant.from_enemy(load(ENEMY_PATHS[i]) as EnemyData, i)
+		_combatants.append(enemy)
+		_enemies.add(enemy)
 
 
 func _begin_next_turn() -> void:
@@ -99,6 +111,42 @@ func _refresh() -> void:
 		var status := " (derrotado)" if combatant.is_defeated else ""
 		parts.append("%s vel %d%s" % [combatant.display_name, combatant.get_speed(), status])
 	_speeds_label.text = " · ".join(parts)
+	_formation_label.text = "Aliados — %s
+Enemigos — %s" % [_describe_formation(_allies), _describe_formation(_enemies)]
+	_targets_label.text = _describe_targets(actor)
+
+
+func _describe_formation(formation: Formation) -> String:
+	return "Delantera: %s · Trasera: %s" % [
+		_join_names(formation.get_row(CombatRow.Row.FRONT)),
+		_join_names(formation.get_row(CombatRow.Row.BACK)),
+	]
+
+
+func _describe_targets(actor: Combatant) -> String:
+	if actor == null:
+		return ""
+	var own_side := _allies if actor.is_ally else _enemies
+	var other_side := _enemies if actor.is_ally else _allies
+	var lines: PackedStringArray = ["Objetivos válidos de %s:" % actor.display_name]
+	for skill in actor.skills:
+		var options: PackedStringArray = []
+		for option in Targeting.get_target_options(skill, actor, own_side, other_side):
+			var group: Array[Combatant] = []
+			group.assign(option)
+			options.append("[%s]" % _join_names(group) if group.size() > 1 else _join_names(group))
+		lines.append("  %s → %s" % [skill.display_name, " | ".join(options) if not options.is_empty() else "(ninguno)"])
+	return "
+".join(lines)
+
+
+func _join_names(combatants: Array[Combatant]) -> String:
+	if combatants.is_empty():
+		return "-"
+	var names: PackedStringArray = []
+	for combatant in combatants:
+		names.append(combatant.display_name)
+	return ", ".join(names)
 
 
 func _living_enemies() -> Array[Combatant]:

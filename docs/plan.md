@@ -37,11 +37,13 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 
 - [x] **3.1 Máquina de estados del combate** — Inicio, turno, acción, fin. Es la pieza más importante del juego: hacerla con calma.
 - [x] **3.2 Cola de turnos por velocidad** — Más la barra visible con el orden de turnos.
-- [ ] **3.3 Filas delantera y trasera** — Ubicar aliados y enemigos. Solo ciertas habilidades alcanzan la fila trasera.
-- [ ] **3.4 Menú de acciones** — Habilidad, objeto, cambiar de fila. Todo con teclado.
+- [x] **3.3 Filas delantera y trasera** — Ubicar aliados y enemigos. Solo ciertas habilidades alcanzan la fila trasera.
+  - Pendiente: no hay cambio de fila manual; "empujar" y "cambiar de fila" serán efectos de habilidad (a sumar junto con los demás efectos de habilidad).
+- [ ] **3.4 Menú de acciones** — Habilidad y objeto. Todo con teclado.
 - [ ] **3.5 Fórmula de daño** — Base + afinidad (+15%) + debilidad o resistencia + reducción por fila trasera.
 - [ ] **3.6 Vida, maná y estamina** — La estamina recupera por turno, el maná no. Cooldowns por turnos.
 - [ ] **3.7 IA enemiga simple** — Elegir habilidad y objetivo con reglas básicas.
+  - Tener en cuenta: la fila delantera recibe más ataques (diseño).
 - [ ] **3.8 Transición sin corte** — Tocar enemigo, la cámara enfoca la sala, aparece la UI y las unidades se acomodan.
 - [ ] **3.9 Sorpresa y emboscada** — Atacar por la espalda da ventaja. Ser emboscado da el primer turno al enemigo.
 

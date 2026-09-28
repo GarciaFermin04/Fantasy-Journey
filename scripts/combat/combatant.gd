@@ -11,8 +11,12 @@ var portrait: Texture2D = null
 var is_ally: bool = false
 ## Position inside its side's formation. Breaks speed ties within a side.
 var formation_index: int = 0
+## Row the unit currently occupies.
+var row: CombatRow.Row = CombatRow.Row.FRONT
 ## Current stats (base stats plus weapon bonuses for recruits).
 var stats: StatBlock = StatBlock.new()
+## Skills the unit can use in this combat.
+var skills: Array[SkillData] = []
 ## Whether the unit was defeated. Defeated units lose their turns.
 var is_defeated: bool = false
 
@@ -25,7 +29,9 @@ static func from_recruit(recruit: RecruitData, weapon: WeaponData, index: int) -
 	combatant.portrait = recruit.sprite
 	combatant.is_ally = true
 	combatant.formation_index = index
+	combatant.row = recruit.preferred_row
 	combatant.stats = recruit.get_stats_with(weapon)
+	combatant.skills = recruit.default_equipped_skills.duplicate()
 	return combatant
 
 
@@ -37,7 +43,9 @@ static func from_enemy(enemy: EnemyData, index: int) -> Combatant:
 	combatant.portrait = enemy.sprite
 	combatant.is_ally = false
 	combatant.formation_index = index
+	combatant.row = enemy.preferred_row
 	combatant.stats = enemy.base_stats.plus(null)
+	combatant.skills = enemy.get_skills()
 	return combatant
 
 
