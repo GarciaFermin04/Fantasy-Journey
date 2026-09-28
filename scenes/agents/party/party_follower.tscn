@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dvaf0dw0ipy70"]
+
+[ext_resource type="Script" uid="uid://do174ogkox6is" path="res://scenes/agents/party/party_follower.gd" id="1_bl1cs"]
+[ext_resource type="PackedScene" uid="uid://h50mmygk8whb" path="res://scenes/agents/recruits/recruit_visual.tscn" id="2_tef7e"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o56gy"]
+radius = 0.3
+height = 1.6
+
+[node name="PartyFollower" type="CharacterBody3D" unique_id=616571825]
+collision_layer = 0
+script = ExtResource("1_bl1cs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1325860318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_o56gy")
+
+[node name="RecruitVisual" parent="." unique_id=315995430 instance=ExtResource("2_tef7e")]

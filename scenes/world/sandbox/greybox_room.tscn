@@ -3,9 +3,9 @@
 [ext_resource type="Material" uid="uid://y6qx8g4iwlk1" path="res://assets/materials/greybox_floor.tres" id="1_0pxwn"]
 [ext_resource type="Material" uid="uid://b7vd1qksv45jj" path="res://assets/materials/greybox_wall.tres" id="2_bdhnp"]
 [ext_resource type="Material" uid="uid://d3wfk7awrmd1b" path="res://assets/materials/greybox_obstacle.tres" id="3_ohcq1"]
-[ext_resource type="PackedScene" uid="uid://dler7c2hsbdac" path="res://scenes/agents/party/party_leader.tscn" id="4_bdhnp"]
 [ext_resource type="PackedScene" uid="uid://l87uf1u8q4av" path="res://scenes/camera/main_camera.tscn" id="5_5xg5r"]
 [ext_resource type="PackedScene" uid="uid://fq3kytqs5b38" path="res://scenes/camera/exploration_camera.tscn" id="6_3objo"]
+[ext_resource type="PackedScene" uid="uid://clegyhw4g50ba" path="res://scenes/agents/party/party.tscn" id="6_5xg5r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5xg5r"]
 
@@ -71,9 +71,6 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=460378261]
 environment = SubResource("Environment_a1sms")
 
-[node name="PartyLeader" parent="." unique_id=1469255191 instance=ExtResource("4_bdhnp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-
 [node name="MainCamera" parent="." unique_id=1523240513 instance=ExtResource("5_5xg5r")]
 physics_interpolation_mode = 1
 transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 7, 10.5)
@@ -82,6 +79,7 @@ fov = 40.0
 
 [node name="ExplorationCamera" parent="." unique_id=66837185 node_paths=PackedStringArray("follow_target") instance=ExtResource("6_3objo")]
 transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 7, 10.5)
-follow_target = NodePath("../PartyLeader")
-align_transform_with_view = Callable()
-align_position_with_view = Callable()
+follow_target = NodePath("../Party/PartyLeader")
+
+[node name="Party" parent="." unique_id=1709499743 instance=ExtResource("6_5xg5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
