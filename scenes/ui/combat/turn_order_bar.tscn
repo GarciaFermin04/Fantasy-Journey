@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/combat/turn_order_bar.gd" id="1_bar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/combat/turn_order_entry.tscn" id="2_entry"]
+
+[node name="TurnOrderBar" type="PanelContainer"]
+script = ExtResource("1_bar")
+entry_scene = ExtResource("2_entry")
+
+[node name="Entries" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
