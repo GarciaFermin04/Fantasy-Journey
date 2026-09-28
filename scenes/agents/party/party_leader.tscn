@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://dler7c2hsbdac"]
 
+[ext_resource type="Script" uid="uid://dt2o4qi4lydwm" path="res://scenes/agents/party/party_leader.gd" id="1_ockbe"]
 [ext_resource type="PackedScene" uid="uid://h50mmygk8whb" path="res://scenes/agents/recruits/recruit_visual.tscn" id="1_q0031"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ockbe"]
@@ -8,6 +9,7 @@ height = 1.6
 
 [node name="PartyLeader" type="CharacterBody3D" unique_id=1469255191]
 collision_layer = 2
+script = ExtResource("1_ockbe")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=891841536]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
