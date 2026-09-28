@@ -103,6 +103,7 @@ godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs 
 `C:\Steam\steamapps\common\Godot Engine\godot.windows.opt.tools.64.exe`.
 
 - Los tests usan GUT (`addons/gut`), extienden `GutTest` y sus archivos empiezan con `test_`.
+- Si se creó una `class_name` nueva, registrarla antes de correr los tests headless (scan del editor o `godot --headless --import`); si no, fallan con "Identifier not declared".
 - Ubicación: `tests/unit/<sistema>/` y `tests/integration/`.
 - Toda lógica pura de reglas lleva tests. Al agregar o cambiar lógica, agregar o actualizar sus tests en el mismo commit.
 - No hacer commit si los tests fallan.
