@@ -88,6 +88,18 @@ func test_from_enemy_keeps_affinity_and_reactions() -> void:
 	assert_eq(combatant.get_reaction(null), EnemyData.AffinityReaction.NEUTRAL)
 
 
+func test_from_enemy_copies_ai_data() -> void:
+	var enemy := _make_enemy(6)
+	var entry := EnemySkillEntry.new()
+	entry.skill = SkillData.new()
+	entry.weight = 3
+	enemy.skills = [entry]
+	enemy.target_preference = EnemyData.TargetPreference.LOWEST_HP
+	var combatant := Combatant.from_enemy(enemy, 0)
+	assert_eq(combatant.skill_weights[entry.skill], 3)
+	assert_eq(combatant.target_preference, EnemyData.TargetPreference.LOWEST_HP)
+
+
 func test_from_enemy_uses_preferred_row_and_skills() -> void:
 	var enemy := _make_enemy(6)
 	var entry := EnemySkillEntry.new()

@@ -12,3 +12,4 @@ min_damage = 1
 heal_stat_divisor = 2.0
 stamina_regen_percent = 20
 enemies_pay_costs = false
+ai_front_row_weight = 2

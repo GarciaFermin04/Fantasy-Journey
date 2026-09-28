@@ -2,8 +2,8 @@ extends Control
 ## Debug scene to try the combat logic with the starting recruits and the
 ## test enemies: turn queue, state machine, formations, valid targets, turn
 ## order bar, command panel and action resolution (damage, healing, costs,
-## stamina regen, cooldowns and victory). Enemy turns are passed with a button
-## until the enemy AI exists.
+## stamina regen, cooldowns, victory/defeat) and the enemy AI, which acts on
+## its own after a short delay.
 
 const RECRUIT_PATHS: Array[String] = [
 	"res://data/recruits/warrior.tres",
@@ -22,12 +22,15 @@ const ENEMY_PATHS: Array[String] = [
 @export var ally_row_capacity: int = 3
 ## Balance numbers for the combat formulas.
 @export var combat_rules: CombatRules
+## Seconds an enemy waits before acting, so its turn can be followed.
+@export var enemy_turn_delay: float = 0.8
 
 var _queue := TurnQueue.new()
 var _machine := CombatStateMachine.new()
 var _combatants: Array[Combatant] = []
 var _allies: Formation
 var _enemies := Formation.new()
+var _rng := RandomNumberGenerator.new()
 
 @onready var _bar: TurnOrderBar = %TurnOrderBar
 @onready var _round_label: Label = %RoundLabel
@@ -35,20 +38,21 @@ var _enemies := Formation.new()
 @onready var _speeds_label: Label = %SpeedsLabel
 @onready var _formation_label: Label = %FormationLabel
 @onready var _targets_label: Label = %TargetsLabel
-@onready var _next_turn_button: Button = %NextTurnButton
 @onready var _defeat_button: Button = %DefeatButton
 @onready var _slow_button: Button = %SlowButton
 @onready var _command_panel: CombatCommandPanel = %CombatCommandPanel
 @onready var _log_label: Label = %LogLabel
+@onready var _enemy_turn_timer: Timer = %EnemyTurnTimer
 
 
 func _ready() -> void:
 	assert(combat_rules != null, "CombatTurnsSandbox needs combat_rules")
+	_rng.randomize()
 	_build_combatants()
 	_queue.setup(_combatants)
 	_machine.state_changed.connect(_on_state_changed)
 	_machine.combat_finished.connect(_on_combat_finished)
-	_next_turn_button.pressed.connect(_on_next_turn_pressed)
+	_enemy_turn_timer.timeout.connect(_on_enemy_turn_timer_timeout)
 	_defeat_button.pressed.connect(_on_defeat_pressed)
 	_slow_button.pressed.connect(_on_slow_pressed)
 	_command_panel.action_confirmed.connect(_on_action_confirmed)
@@ -77,9 +81,11 @@ func _begin_next_turn() -> void:
 	var actor := _queue.next_actor()
 	actor.start_turn(combat_rules)
 	_machine.begin_turn(actor)
-	_next_turn_button.disabled = actor.is_ally
 	_refresh()
-	_open_commands_if_ally()
+	if actor.is_ally:
+		_open_commands_if_ally()
+	else:
+		_enemy_turn_timer.start(enemy_turn_delay)
 
 
 func _open_commands_if_ally() -> void:
@@ -89,15 +95,26 @@ func _open_commands_if_ally() -> void:
 
 
 func _on_action_confirmed(action: CombatAction) -> void:
+	_perform(action)
+
+
+func _on_enemy_turn_timer_timeout() -> void:
+	if _machine.get_state() != CombatStateMachine.State.AWAITING_ACTION:
+		return
+	var actor := _queue.get_current_actor()
+	var action := EnemyAI.choose_action(actor, _enemies, _allies, combat_rules, _rng)
+	if action == null:
+		_log_label.text = "%s no puede actuar y pasa el turno" % actor.display_name
+		_machine.submit_action(null)
+		_finish_turn()
+		return
+	_perform(action)
+
+
+func _perform(action: CombatAction) -> void:
 	_machine.submit_action(action)
 	var results := ActionResolver.resolve(action, combat_rules)
 	_log_label.text = "%s usa %s → %s" % [action.user.display_name, action.skill.display_name, _describe_results(results)]
-	_finish_turn()
-
-
-func _on_next_turn_pressed() -> void:
-	_log_label.text = "%s pasa el turno (la IA llega en la 3.7)" % _queue.get_current_actor().display_name
-	_machine.submit_action(null)
 	_finish_turn()
 
 
@@ -114,6 +131,7 @@ func _on_defeat_pressed() -> void:
 			break
 	if CombatOutcome.evaluate(_allies, _enemies) != CombatStateMachine.Result.NONE:
 		_command_panel.close()
+		_enemy_turn_timer.stop()
 		_log_label.text = "Último enemigo derrotado con el botón de depuración"
 		_machine.submit_action(null)
 		_finish_turn()
@@ -138,7 +156,8 @@ func _on_state_changed(_from: CombatStateMachine.State, to: CombatStateMachine.S
 func _on_combat_finished(result: CombatStateMachine.Result) -> void:
 	_state_label.text = "Combate terminado: %s" % CombatStateMachine.Result.keys()[result]
 	_command_panel.close()
-	for button: Button in [_next_turn_button, _defeat_button, _slow_button]:
+	_enemy_turn_timer.stop()
+	for button: Button in [_defeat_button, _slow_button]:
 		button.disabled = true
 	_refresh()
 

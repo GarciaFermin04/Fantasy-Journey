@@ -19,6 +19,9 @@ extends Resource
 @export_range(0, 100, 1) var stamina_regen_percent: int = 20
 ## Whether enemies pay mana and stamina for their skills.
 @export var enemies_pay_costs: bool = false
+## Weight of front row targets for enemies that pick targets at random
+## (back row targets weigh 1). The front row receives more attacks.
+@export_range(1, 10, 1, "or_greater") var ai_front_row_weight: int = 2
 
 
 ## Returns a list of structural errors in these rules. Empty means valid.
@@ -38,4 +41,6 @@ func validate() -> PackedStringArray:
 		errors.append("heal_stat_divisor must be positive")
 	if stamina_regen_percent < 0:
 		errors.append("stamina_regen_percent is negative")
+	if ai_front_row_weight < 1:
+		errors.append("ai_front_row_weight must be at least 1")
 	return errors

@@ -29,6 +29,10 @@ var weapon: WeaponData = null
 var weaknesses: Array[AffinityData] = []
 ## Affinities the unit resists.
 var resistances: Array[AffinityData] = []
+## Relative weight of each skill for the enemy AI. Missing skills weigh 1.
+var skill_weights: Dictionary[SkillData, int] = {}
+## How the enemy AI chooses among valid targets.
+var target_preference: EnemyData.TargetPreference = EnemyData.TargetPreference.RANDOM
 ## Whether the unit was defeated. Defeated units lose their turns.
 var is_defeated: bool = false
 ## Current health.
@@ -73,6 +77,10 @@ static func from_enemy(enemy: EnemyData, index: int) -> Combatant:
 	combatant.affinity = enemy.affinity
 	combatant.weaknesses = enemy.weaknesses.duplicate()
 	combatant.resistances = enemy.resistances.duplicate()
+	combatant.target_preference = enemy.target_preference
+	for entry in enemy.skills:
+		if entry != null and entry.skill != null:
+			combatant.skill_weights[entry.skill] = entry.weight
 	combatant.start_combat()
 	return combatant
 

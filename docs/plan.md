@@ -44,8 +44,8 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 - [x] **3.5 Fórmula de daño** — Base (potencia × ataque / defensa) + afinidad del recluta y del arma + debilidad o resistencia.
 - [x] **3.6 Vida, maná y estamina** — La estamina recupera por turno, el maná no. Cooldowns por turnos.
   - Deshabilitar en el menú las habilidades sin recursos suficientes o en enfriamiento. (Hecho.)
-- [ ] **3.7 IA enemiga simple** — Elegir habilidad y objetivo con reglas básicas.
-  - Tener en cuenta: la fila delantera recibe más ataques (diseño).
+- [x] **3.7 IA enemiga simple** — Elegir habilidad y objetivo con reglas básicas.
+  - La fila delantera recibe más ataques: pesa el doble para los enemigos que eligen al azar.
 - [ ] **3.8 Transición sin corte** — Tocar enemigo, la cámara enfoca la sala, aparece la UI y las unidades se acomodan.
 - [ ] **3.9 Sorpresa y emboscada** — Atacar por la espalda da ventaja. Ser emboscado da el primer turno al enemigo.
 

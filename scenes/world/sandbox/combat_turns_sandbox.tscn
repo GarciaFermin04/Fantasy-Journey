@@ -77,11 +77,6 @@ theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
 [node name="Buttons" type="HBoxContainer" parent="Margin/VBox/Columns/Info"]
 layout_mode = 2
 
-[node name="NextTurnButton" type="Button" parent="Margin/VBox/Columns/Info/Buttons"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Siguiente turno"
-
 [node name="DefeatButton" type="Button" parent="Margin/VBox/Columns/Info/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -96,3 +91,7 @@ text = "Bajar velocidad"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
+
+[node name="EnemyTurnTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
