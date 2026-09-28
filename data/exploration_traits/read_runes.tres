@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ExplorationTraitData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/exploration_trait_data.gd" id="1_r"]
+
+[resource]
+script = ExtResource("1_r")
+id = &"read_runes"
+display_name = "Leer runas"
+description = "Puede leer runas arcanas y activar sus efectos."

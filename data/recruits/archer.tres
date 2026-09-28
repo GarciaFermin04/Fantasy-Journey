@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="RecruitData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/recruit_data.gd" id="1_r"]
+[ext_resource type="Texture2D" path="res://assets/sprites/recruits/placeholder_recruit_2.tres" id="2_r"]
+[ext_resource type="Script" path="res://scripts/resources/stat_block.gd" id="3_r"]
+[ext_resource type="Resource" path="res://data/affinities/wind.tres" id="4_r"]
+[ext_resource type="Script" path="res://scripts/resources/weapon_type_data.gd" id="5_r"]
+[ext_resource type="Resource" path="res://data/weapons/types/bow.tres" id="6_r"]
+[ext_resource type="Script" path="res://scripts/resources/skill_data.gd" id="7_r"]
+[ext_resource type="Resource" path="res://data/skills/recruit/wind_arrow.tres" id="8_r"]
+[ext_resource type="Resource" path="res://data/skills/recruit/volley.tres" id="9_r"]
+[ext_resource type="Resource" path="res://data/exploration_traits/long_shot.tres" id="10_r"]
+[ext_resource type="Resource" path="res://data/weapons/base/bow.tres" id="11_r"]
+[ext_resource type="Resource" path="res://data/skills/weapon/shot.tres" id="12_r"]
+[ext_resource type="Resource" path="res://data/skills/weapon/precise_arrow.tres" id="13_r"]
+[ext_resource type="Resource" path="res://data/skills/weapon/arrow_rain.tres" id="14_r"]
+
+[sub_resource type="Resource" id="StatBlock_1"]
+script = ExtResource("3_r")
+max_hp = 85
+max_mana = 20
+max_stamina = 35
+attack = 12
+magic_attack = 6
+defense = 7
+magic_defense = 8
+speed = 14
+
+[resource]
+script = ExtResource("1_r")
+id = &"archer"
+display_name = "Arquero"
+description = "Rápido y preciso: alcanza a cualquier enemigo."
+sprite = ExtResource("2_r")
+base_stats = SubResource("StatBlock_1")
+affinity = ExtResource("4_r")
+preferred_row = 1
+allowed_weapon_types = Array[ExtResource("5_r")]([ExtResource("6_r")])
+own_skills = Array[ExtResource("7_r")]([ExtResource("8_r"), ExtResource("9_r")])
+exploration_trait = ExtResource("10_r")
+default_weapon = ExtResource("11_r")
+default_equipped_skills = Array[ExtResource("7_r")]([ExtResource("12_r"), ExtResource("13_r"), ExtResource("14_r"), ExtResource("8_r")])

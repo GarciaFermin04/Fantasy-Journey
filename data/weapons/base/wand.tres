@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://data/weapons/types/wand.tres" id="2_r"]
+
+[resource]
+script = ExtResource("1_r")
+id = &"wand"
+display_name = "Varita"
+description = "Varita común, sin modificaciones."
+rarity = 0
+weapon_type = ExtResource("2_r")

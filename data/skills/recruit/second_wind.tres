@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/skill_data.gd" id="1_r"]
+
+[resource]
+script = ExtResource("1_r")
+id = &"second_wind"
+display_name = "Segundo Aliento"
+description = "Recupera algo de vida."
+effect = 1
+category = 0
+power = 20
+mana_cost = 0
+stamina_cost = 10
+cooldown_turns = 3
+target_side = 2
+target_reach = 0
+target_area = 0

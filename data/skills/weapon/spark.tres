@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/skill_data.gd" id="1_r"]
+
+[resource]
+script = ExtResource("1_r")
+id = &"spark"
+display_name = "Chispa"
+description = "Una pequeña descarga mágica. No consume maná."
+effect = 0
+category = 1
+power = 15
+mana_cost = 0
+stamina_cost = 0
+cooldown_turns = 0
+target_side = 0
+target_reach = 1
+target_area = 0

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponTypeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_type_data.gd" id="1_r"]
+[ext_resource type="Script" path="res://scripts/resources/skill_data.gd" id="2_r"]
+[ext_resource type="Resource" path="res://data/skills/weapon/shot.tres" id="3_r"]
+[ext_resource type="Resource" path="res://data/skills/weapon/precise_arrow.tres" id="4_r"]
+[ext_resource type="Resource" path="res://data/skills/weapon/arrow_rain.tres" id="5_r"]
+
+[resource]
+script = ExtResource("1_r")
+id = &"bow"
+display_name = "Arco"
+description = "Atacan a distancia a cualquier fila."
+base_skills = Array[ExtResource("2_r")]([ExtResource("3_r"), ExtResource("4_r"), ExtResource("5_r")])

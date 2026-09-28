@@ -30,7 +30,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 - [x] **2.3 Resource de Recluta** — Stats, afinidad, armas permitidas, habilidades propias y rasgo de exploración.
   - Pendiente: pasivas (recluta, Vínculo, armas únicas). Diseñarlas en la Etapa 3, cuando haya combate.
 - [x] **2.4 Resource de Enemigo** — Stats, debilidades, resistencias, habilidades y patrón simple de IA.
-- [ ] **2.5 Crear los 3 reclutas** — Guerrero con espada, mago con varita, arquero con arco. 4-5 habilidades equipadas cada uno.
+- [x] **2.5 Crear los 3 reclutas** — Guerrero con espada, mago con varita, arquero con arco. 4 habilidades equipadas cada uno.
 
 ## Etapa 3: Combate por turnos (~50 h)
 **Lista cuando:** una pelea 3 vs 3 arranca al tocar un enemigo, se juega completa en la misma sala y vuelve a la exploración.

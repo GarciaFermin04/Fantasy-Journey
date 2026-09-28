@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/skill_data.gd" id="1_r"]
+
+[resource]
+script = ExtResource("1_r")
+id = &"minor_heal"
+display_name = "Curación Menor"
+description = "Cura a un aliado."
+effect = 1
+category = 1
+power = 25
+mana_cost = 8
+stamina_cost = 0
+cooldown_turns = 0
+target_side = 1
+target_reach = 1
+target_area = 0
