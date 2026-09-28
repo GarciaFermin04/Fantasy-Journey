@@ -35,7 +35,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 ## Etapa 3: Combate por turnos (~50 h)
 **Lista cuando:** una pelea 3 vs 3 arranca al tocar un enemigo, se juega completa en la misma sala y vuelve a la exploración.
 
-- [ ] **3.1 Máquina de estados del combate** — Inicio, turno, acción, fin. Es la pieza más importante del juego: hacerla con calma.
+- [x] **3.1 Máquina de estados del combate** — Inicio, turno, acción, fin. Es la pieza más importante del juego: hacerla con calma.
 - [ ] **3.2 Cola de turnos por velocidad** — Más la barra visible con el orden de turnos.
 - [ ] **3.3 Filas delantera y trasera** — Ubicar aliados y enemigos. Solo ciertas habilidades alcanzan la fila trasera.
 - [ ] **3.4 Menú de acciones** — Habilidad, objeto, cambiar de fila. Todo con teclado.
