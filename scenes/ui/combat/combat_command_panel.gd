@@ -14,6 +14,7 @@ var _phase: Phase = Phase.HIDDEN
 var _actor: Combatant = null
 var _own_side: Formation = null
 var _other_side: Formation = null
+var _rules: CombatRules = null
 var _chosen_skill: SkillData = null
 
 @onready var _menu: ActionMenu = %ActionMenu
@@ -28,12 +29,14 @@ func _ready() -> void:
 
 
 ## Starts the command input for [param actor]. [param own_side] is its
-## formation and [param other_side] the opponents'.
-func open(actor: Combatant, own_side: Formation, other_side: Formation) -> void:
-	assert(actor != null and own_side != null and other_side != null, "CombatCommandPanel.open: missing arguments")
+## formation and [param other_side] the opponents'. Skills without targets,
+## without enough resources or on cooldown are disabled.
+func open(actor: Combatant, own_side: Formation, other_side: Formation, rules: CombatRules) -> void:
+	assert(actor != null and own_side != null and other_side != null and rules != null, "CombatCommandPanel.open: missing arguments")
 	_actor = actor
 	_own_side = own_side
 	_other_side = other_side
+	_rules = rules
 	_chosen_skill = null
 	_enter_choosing_skill(null)
 
@@ -74,7 +77,7 @@ func _enter_choosing_skill(focus_skill: SkillData) -> void:
 	_phase = Phase.CHOOSING_SKILL
 	show()
 	_selector.close()
-	_menu.open(_actor.skills, _skills_without_targets(), focus_skill)
+	_menu.open(_actor, _unusable_skills(), _rules, focus_skill)
 
 
 func _close() -> void:
@@ -88,9 +91,9 @@ func _options_for(skill: SkillData) -> Array[Array]:
 	return Targeting.get_target_options(skill, _actor, _own_side, _other_side)
 
 
-func _skills_without_targets() -> Array[SkillData]:
+func _unusable_skills() -> Array[SkillData]:
 	var result: Array[SkillData] = []
 	for skill in _actor.skills:
-		if _options_for(skill).is_empty():
+		if not _actor.can_use(skill, _rules) or _options_for(skill).is_empty():
 			result.append(skill)
 	return result

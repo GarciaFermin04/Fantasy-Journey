@@ -15,9 +15,11 @@ var _slash: SkillData
 var _sweep: SkillData
 var _heal: SkillData
 var _rain: SkillData
+var _rules: CombatRules
 
 
 func before_each() -> void:
+	_rules = CombatRules.new()
 	_panel = PANEL_SCENE.instantiate()
 	add_child_autofree(_panel)
 	_menu = _panel.get_node("%ActionMenu")
@@ -30,6 +32,11 @@ func before_each() -> void:
 	_enemies = Formation.new()
 	_warrior = _add(_allies, "Guerrero", CombatRow.Row.FRONT)
 	_warrior.skills = [_slash, _sweep, _heal, _rain]
+	_warrior.is_ally = true
+	_warrior.stats.max_hp = 100
+	_warrior.stats.max_mana = 10
+	_warrior.stats.max_stamina = 20
+	_warrior.start_combat()
 	_slime = _add(_enemies, "Limo", CombatRow.Row.FRONT)
 	_imp = _add(_enemies, "Diablillo", CombatRow.Row.BACK)
 
@@ -46,12 +53,14 @@ func _add(formation: Formation, unit_name: String, row: CombatRow.Row) -> Combat
 	var combatant := Combatant.new()
 	combatant.display_name = unit_name
 	combatant.row = row
+	combatant.stats.max_hp = 50
+	combatant.start_combat()
 	formation.add(combatant)
 	return combatant
 
 
 func _open() -> void:
-	_panel.open(_warrior, _allies, _enemies)
+	_panel.open(_warrior, _allies, _enemies, _rules)
 
 
 func test_starts_hidden() -> void:
@@ -132,9 +141,20 @@ func test_describe_target_texts() -> void:
 
 
 func test_describe_cost_texts() -> void:
-	var skill := SkillData.new()
-	assert_eq(ActionMenu.describe_cost(skill), "Sin coste")
-	skill.mana_cost = 6
-	skill.stamina_cost = 3
-	skill.cooldown_turns = 2
-	assert_eq(ActionMenu.describe_cost(skill), "Coste: 6 maná + 3 estamina · Enfriamiento: 2 turnos")
+	assert_eq(ActionMenu.describe_cost(0, 0, 0), "Sin coste")
+	assert_eq(ActionMenu.describe_cost(6, 3, 2), "Coste: 6 maná + 3 estamina · Enfriamiento: 2 turnos")
+	assert_eq(ActionMenu.describe_cost(0, 5, 2, 1), "Coste: 5 estamina · Enfriamiento: faltan 1 turnos")
+
+
+func test_skill_without_enough_mana_is_disabled() -> void:
+	_rain.mana_cost = 50
+	_open()
+	assert_true(_menu.get_skill_button(_rain).disabled)
+	assert_false(_menu.get_skill_button(_slash).disabled)
+
+
+func test_skill_on_cooldown_is_disabled() -> void:
+	_sweep.cooldown_turns = 2
+	_warrior.pay_for(_sweep, _rules)
+	_open()
+	assert_true(_menu.get_skill_button(_sweep).disabled)

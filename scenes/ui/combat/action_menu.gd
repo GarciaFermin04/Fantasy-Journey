@@ -31,15 +31,21 @@ const _REACH_TEXT: Dictionary[SkillData.TargetReach, String] = {
 
 var _skill_buttons: Dictionary[SkillData, Button] = {}
 var _item_button: Button = null
+var _actor: Combatant = null
+var _rules: CombatRules = null
 
 @onready var _buttons: VBoxContainer = %Buttons
 @onready var _details: Label = %Details
 
 
-## Shows [param skills]. Those in [param disabled_skills] are shown but cannot
-## be chosen. Focus goes to [param focus_skill] or the first enabled skill.
-func open(skills: Array[SkillData], disabled_skills: Array[SkillData], focus_skill: SkillData = null) -> void:
+## Shows the skills of [param actor]. Those in [param disabled_skills] are shown
+## but cannot be chosen. Focus goes to [param focus_skill] or the first enabled
+## skill. [param rules] are used to show the actor's real costs.
+func open(actor: Combatant, disabled_skills: Array[SkillData], rules: CombatRules, focus_skill: SkillData = null) -> void:
 	_clear()
+	_actor = actor
+	_rules = rules
+	var skills := actor.skills
 	for skill in skills:
 		var button := _add_button(skill.display_name, disabled_skills.has(skill))
 		button.pressed.connect(skill_chosen.emit.bind(skill))
@@ -79,16 +85,19 @@ static func describe_target(skill: SkillData) -> String:
 	return "%s, %s" % [_SIDE_SINGLE[skill.target_side], _REACH_TEXT[skill.target_reach]]
 
 
-## Returns a short description of the cost and cooldown of [param skill].
-static func describe_cost(skill: SkillData) -> String:
+## Returns a short description of a skill cost and cooldown. When
+## [param cooldown_remaining] is above zero it shows the turns left instead.
+static func describe_cost(mana_cost: int, stamina_cost: int, cooldown_turns: int, cooldown_remaining: int = 0) -> String:
 	var parts: PackedStringArray = []
-	if skill.mana_cost > 0:
-		parts.append("%d maná" % skill.mana_cost)
-	if skill.stamina_cost > 0:
-		parts.append("%d estamina" % skill.stamina_cost)
+	if mana_cost > 0:
+		parts.append("%d maná" % mana_cost)
+	if stamina_cost > 0:
+		parts.append("%d estamina" % stamina_cost)
 	var cost := "Coste: %s" % " + ".join(parts) if not parts.is_empty() else "Sin coste"
-	if skill.cooldown_turns > 0:
-		cost += " · Enfriamiento: %d turnos" % skill.cooldown_turns
+	if cooldown_remaining > 0:
+		cost += " · Enfriamiento: faltan %d turnos" % cooldown_remaining
+	elif cooldown_turns > 0:
+		cost += " · Enfriamiento: %d turnos" % cooldown_turns
 	return cost
 
 
@@ -113,10 +122,17 @@ func _focus_initial(skills: Array[SkillData], disabled_skills: Array[SkillData],
 
 
 func _show_skill_details(skill: SkillData) -> void:
-	_details.text = "%s\n%s\n%s" % [describe_cost(skill), describe_target(skill), skill.description]
+	var cost := describe_cost(
+		_actor.get_mana_cost(skill, _rules),
+		_actor.get_stamina_cost(skill, _rules),
+		skill.cooldown_turns,
+		_actor.get_cooldown_remaining(skill))
+	_details.text = "%s\n%s\n%s" % [cost, describe_target(skill), skill.description]
 
 
 func _clear() -> void:
+	_actor = null
+	_rules = null
 	_skill_buttons.clear()
 	_item_button = null
 	for child in _buttons.get_children():

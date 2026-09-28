@@ -65,6 +65,11 @@ func is_back_row_exposed() -> bool:
 	return get_row(CombatRow.Row.FRONT).is_empty()
 
 
+## Returns whether every unit of this side is defeated.
+func is_wiped_out() -> bool:
+	return get_living().is_empty()
+
+
 ## Returns whether [param combatant] belongs to this side.
 func has(combatant: Combatant) -> bool:
 	return _members.has(combatant)

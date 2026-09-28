@@ -15,6 +15,10 @@ extends Resource
 @export_range(0, 10, 1, "or_greater") var min_damage: int = 1
 ## Healing adds the user's attack stat divided by this value.
 @export var heal_stat_divisor: float = 2.0
+## Stamina recovered at the start of each own turn, in percent of the maximum.
+@export_range(0, 100, 1) var stamina_regen_percent: int = 20
+## Whether enemies pay mana and stamina for their skills.
+@export var enemies_pay_costs: bool = false
 
 
 ## Returns a list of structural errors in these rules. Empty means valid.
@@ -32,4 +36,6 @@ func validate() -> PackedStringArray:
 		errors.append("min_damage is negative")
 	if heal_stat_divisor <= 0.0:
 		errors.append("heal_stat_divisor must be positive")
+	if stamina_regen_percent < 0:
+		errors.append("stamina_regen_percent is negative")
 	return errors

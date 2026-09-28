@@ -42,8 +42,8 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 - [x] **3.4 Menú de acciones** — Habilidad y objeto. Todo con teclado.
   - "Objeto" queda visible y deshabilitado hasta que existan los consumibles.
 - [x] **3.5 Fórmula de daño** — Base (potencia × ataque / defensa) + afinidad del recluta y del arma + debilidad o resistencia.
-- [ ] **3.6 Vida, maná y estamina** — La estamina recupera por turno, el maná no. Cooldowns por turnos.
-  - Deshabilitar en el menú las habilidades sin recursos suficientes o en enfriamiento.
+- [x] **3.6 Vida, maná y estamina** — La estamina recupera por turno, el maná no. Cooldowns por turnos.
+  - Deshabilitar en el menú las habilidades sin recursos suficientes o en enfriamiento. (Hecho.)
 - [ ] **3.7 IA enemiga simple** — Elegir habilidad y objetivo con reglas básicas.
   - Tener en cuenta: la fila delantera recibe más ataques (diseño).
 - [ ] **3.8 Transición sin corte** — Tocar enemigo, la cámara enfoca la sala, aparece la UI y las unidades se acomodan.
@@ -57,6 +57,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 - [ ] **4.2 Generador de piso híbrido** — Orden variable de salas: camino principal + ramas opcionales.
 - [ ] **4.3 Puertas y paso entre salas** — Entrar y salir de salas sin cortes bruscos.
 - [ ] **4.4 Sala de descanso** — Recupera vida y maná. Clave para que el maná sin recarga funcione.
+  - Vida y maná se arrastran entre combates: falta el estado de la run que los guarde (`Combatant.start_combat(hp, mana)` ya lo soporta).
 - [ ] **4.5 Loot temporal de run** — 5-8 artefactos simples que duran solo la run.
 - [ ] **4.6 Interacción por recluta** — Guerrero rompe obstáculo, mago lee runa, arquero alcanza algo lejano. Abre ramas, nunca bloquea el camino.
 - [ ] **4.7 Jefe del piso** — Un enemigo con dos fases o una mecánica propia.
