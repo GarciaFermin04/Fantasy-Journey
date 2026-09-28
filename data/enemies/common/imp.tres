@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/enemy_data.gd" id="1_r"]
+[ext_resource type="Script" path="res://scripts/resources/stat_block.gd" id="2_r"]
+[ext_resource type="Resource" path="res://data/affinities/fire.tres" id="3_r"]
+[ext_resource type="Script" path="res://scripts/resources/affinity_data.gd" id="4_r"]
+[ext_resource type="Resource" path="res://data/affinities/wind.tres" id="5_r"]
+[ext_resource type="Script" path="res://scripts/resources/enemy_skill_entry.gd" id="6_r"]
+[ext_resource type="Resource" path="res://data/skills/enemy/ember.tres" id="7_r"]
+[ext_resource type="Resource" path="res://data/skills/enemy/bite.tres" id="8_r"]
+
+[sub_resource type="Resource" id="StatBlock_1"]
+script = ExtResource("2_r")
+max_hp = 45
+max_mana = 30
+max_stamina = 10
+attack = 7
+magic_attack = 14
+defense = 4
+magic_defense = 10
+speed = 12
+
+[sub_resource type="Resource" id="EnemySkillEntry_2"]
+script = ExtResource("6_r")
+skill = ExtResource("7_r")
+weight = 2
+
+[sub_resource type="Resource" id="EnemySkillEntry_3"]
+script = ExtResource("6_r")
+skill = ExtResource("8_r")
+weight = 1
+
+[resource]
+script = ExtResource("1_r")
+id = &"imp"
+display_name = "Diablillo"
+description = "Un demonio menor que ataca desde atrás al más débil."
+is_boss = false
+base_stats = SubResource("StatBlock_1")
+affinity = ExtResource("3_r")
+preferred_row = 1
+weaknesses = Array[ExtResource("4_r")]([ExtResource("5_r")])
+resistances = Array[ExtResource("4_r")]([ExtResource("3_r")])
+skills = Array[ExtResource("6_r")]([SubResource("EnemySkillEntry_2"), SubResource("EnemySkillEntry_3")])
+target_preference = 1

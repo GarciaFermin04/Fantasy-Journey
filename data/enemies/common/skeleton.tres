@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/enemy_data.gd" id="1_r"]
+[ext_resource type="Script" path="res://scripts/resources/stat_block.gd" id="2_r"]
+[ext_resource type="Script" path="res://scripts/resources/affinity_data.gd" id="3_r"]
+[ext_resource type="Resource" path="res://data/affinities/break.tres" id="4_r"]
+[ext_resource type="Resource" path="res://data/affinities/cut.tres" id="5_r"]
+[ext_resource type="Script" path="res://scripts/resources/enemy_skill_entry.gd" id="6_r"]
+[ext_resource type="Resource" path="res://data/skills/enemy/bone_strike.tres" id="7_r"]
+[ext_resource type="Resource" path="res://data/skills/enemy/rusty_slash.tres" id="8_r"]
+
+[sub_resource type="Resource" id="StatBlock_1"]
+script = ExtResource("2_r")
+max_hp = 75
+max_mana = 0
+max_stamina = 20
+attack = 13
+magic_attack = 2
+defense = 10
+magic_defense = 5
+speed = 7
+
+[sub_resource type="Resource" id="EnemySkillEntry_2"]
+script = ExtResource("6_r")
+skill = ExtResource("7_r")
+weight = 3
+
+[sub_resource type="Resource" id="EnemySkillEntry_3"]
+script = ExtResource("6_r")
+skill = ExtResource("8_r")
+weight = 1
+
+[resource]
+script = ExtResource("1_r")
+id = &"skeleton"
+display_name = "Esqueleto"
+description = "Huesos animados. Se quiebran con golpes contundentes."
+is_boss = false
+base_stats = SubResource("StatBlock_1")
+preferred_row = 0
+weaknesses = Array[ExtResource("3_r")]([ExtResource("4_r")])
+resistances = Array[ExtResource("3_r")]([ExtResource("5_r")])
+skills = Array[ExtResource("6_r")]([SubResource("EnemySkillEntry_2"), SubResource("EnemySkillEntry_3")])
+target_preference = 0
