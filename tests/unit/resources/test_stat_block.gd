@@ -55,3 +55,19 @@ func test_plus_does_not_modify_operands() -> void:
 	base.plus(bonus)
 	assert_eq(base.attack, 10)
 	assert_eq(bonus.attack, 3)
+
+
+func test_positive_base_stats_are_valid() -> void:
+	assert_eq(_make_block(5).validate_as_base_stats(), PackedStringArray())
+
+
+func test_base_stats_with_zero_hp_are_invalid() -> void:
+	var block := _make_block(5)
+	block.max_hp = 0
+	assert_has(block.validate_as_base_stats(), "max_hp must be positive")
+
+
+func test_base_stats_with_negative_stat_are_invalid() -> void:
+	var block := _make_block(5)
+	block.defense = -1
+	assert_has(block.validate_as_base_stats(), "stat DEFENSE is negative")

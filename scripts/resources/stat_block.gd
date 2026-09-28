@@ -61,3 +61,15 @@ func plus(other: StatBlock) -> StatBlock:
 		var bonus := 0 if other == null else other.get_stat(stat)
 		result.set_stat(stat, get_stat(stat) + bonus)
 	return result
+
+
+## Returns errors for this block used as base stats of a unit: health must
+## be positive and no stat can be negative. Empty means valid.
+func validate_as_base_stats() -> PackedStringArray:
+	var errors := PackedStringArray()
+	if max_hp <= 0:
+		errors.append("max_hp must be positive")
+	for stat: Stat in Stat.values():
+		if get_stat(stat) < 0:
+			errors.append("stat %s is negative" % Stat.keys()[stat])
+	return errors

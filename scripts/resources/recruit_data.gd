@@ -71,7 +71,10 @@ func validate() -> PackedStringArray:
 		errors.append("id is empty")
 	if display_name.strip_edges().is_empty():
 		errors.append("display_name is empty")
-	errors.append_array(_validate_stats())
+	if base_stats == null:
+		errors.append("base_stats is missing")
+	else:
+		errors.append_array(base_stats.validate_as_base_stats())
 	if allowed_weapon_types.is_empty():
 		errors.append("allowed_weapon_types is empty")
 	if allowed_weapon_types.has(null):
@@ -79,19 +82,6 @@ func validate() -> PackedStringArray:
 	if own_skills.has(null):
 		errors.append("own_skills contains an empty entry")
 	errors.append_array(_validate_default_loadout())
-	return errors
-
-
-func _validate_stats() -> PackedStringArray:
-	var errors := PackedStringArray()
-	if base_stats == null:
-		errors.append("base_stats is missing")
-		return errors
-	if base_stats.max_hp <= 0:
-		errors.append("max_hp must be positive")
-	for stat: StatBlock.Stat in StatBlock.Stat.values():
-		if base_stats.get_stat(stat) < 0:
-			errors.append("stat %s is negative" % StatBlock.Stat.keys()[stat])
 	return errors
 
 
