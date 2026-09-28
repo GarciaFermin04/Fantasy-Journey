@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://l87uf1u8q4av" path="res://scenes/camera/main_camera.tscn" id="5_5xg5r"]
 [ext_resource type="PackedScene" uid="uid://fq3kytqs5b38" path="res://scenes/camera/exploration_camera.tscn" id="6_3objo"]
 [ext_resource type="PackedScene" uid="uid://clegyhw4g50ba" path="res://scenes/agents/party/party.tscn" id="6_5xg5r"]
+[ext_resource type="PackedScene" uid="uid://k4323ebecnvu" path="res://scenes/interactables/test_interactable.tscn" id="7_3objo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5xg5r"]
 
@@ -73,13 +74,18 @@ environment = SubResource("Environment_a1sms")
 
 [node name="MainCamera" parent="." unique_id=1523240513 instance=ExtResource("5_5xg5r")]
 physics_interpolation_mode = 1
-transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 7, 10.5)
+transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 7, 9.5)
 top_level = true
 fov = 40.0
 
 [node name="ExplorationCamera" parent="." unique_id=66837185 node_paths=PackedStringArray("follow_target") instance=ExtResource("6_3objo")]
-transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 7, 10.5)
+transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 7, 9.5)
 follow_target = NodePath("../Party/PartyLeader")
+align_transform_with_view = Callable()
+align_position_with_view = Callable()
 
 [node name="Party" parent="." unique_id=1709499743 instance=ExtResource("6_5xg5r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="TestInteractable" parent="." unique_id=537627898 instance=ExtResource("7_3objo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -1)

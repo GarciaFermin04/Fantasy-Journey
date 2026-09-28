@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://k4323ebecnvu"]
+
+[ext_resource type="Script" uid="uid://cmy8gioqmd4n" path="res://scenes/interactables/test_interactable.gd" id="1_bp64h"]
+[ext_resource type="Material" uid="uid://bjb0gdibsq3vt" path="res://assets/materials/greybox_interactable.tres" id="2_8dqi4"]
+[ext_resource type="PackedScene" uid="uid://dfcn7b1k2vki5" path="res://scenes/components/interactable_component.tscn" id="3_ay6tp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nk8ta"]
+size = Vector3(0.8, 1, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0j50w"]
+size = Vector3(0.8, 1, 0.8)
+
+[node name="TestInteractable" type="StaticBody3D" unique_id=537627898]
+script = ExtResource("1_bp64h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1201647003]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_nk8ta")
+
+[node name="Pedestal" type="MeshInstance3D" parent="." unique_id=2117168984]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+material_override = ExtResource("2_8dqi4")
+mesh = SubResource("BoxMesh_0j50w")
+
+[node name="InteractableComponent" parent="." unique_id=936980360 instance=ExtResource("3_ay6tp")]
+unique_name_in_owner = true
+
+[node name="ResponseLabel" type="Label3D" parent="." unique_id=818552583]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.8784314, 0.4, 1)
+text = "¡Funciona!"
+font_size = 64
+outline_size = 16
+
+[node name="ResponseTimer" type="Timer" parent="." unique_id=2056626982]
+unique_name_in_owner = true
+one_shot = true

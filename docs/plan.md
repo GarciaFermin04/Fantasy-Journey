@@ -20,7 +20,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
   - Input Map: `move_up/down/left/right` (WASD + flechas), `interact` (E, Enter, Enter numérico).
 - [x] **1.4 Cámara fija inclinada** — Vista picada que sigue al líder, sin rotación libre. Es la base del estilo HeartGold/Platino.
 - [x] **1.5 Party que sigue al líder** — Los otros 2 reclutas caminan detrás. Si complica, mostrar solo al líder por ahora.
-- [ ] **1.6 Interacción básica** — InteractableComponent reutilizable + un objeto de prueba en la sala. Tecla de interacción, mostrar un aviso simple al acercarse y una respuesta al interactuar (print o label). Es la base para cofres, runas y NPCs.
+- [x] **1.6 Interacción básica** — InteractableComponent reutilizable + un objeto de prueba en la sala. Tecla de interacción, mostrar un aviso simple al acercarse y una respuesta al interactuar (print o label). Es la base para cofres, runas y NPCs.
 
 ## Etapa 2: Datos del juego (~15 h)
 **Lista cuando:** guerrero, mago y arquero existen como archivos de datos con sus armas y habilidades.
