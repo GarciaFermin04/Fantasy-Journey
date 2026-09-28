@@ -1,7 +1,7 @@
 extends Control
 ## Debug scene to try the turn queue, the combat state machine, formations,
-## valid targets and the turn order bar with the starting recruits and the
-## test enemies.
+## valid targets, the turn order bar and the command panel with the starting
+## recruits and the test enemies. Actions have no effect yet.
 
 const RECRUIT_PATHS: Array[String] = [
 	"res://data/recruits/warrior.tres",
@@ -34,6 +34,8 @@ var _enemies := Formation.new()
 @onready var _next_turn_button: Button = %NextTurnButton
 @onready var _defeat_button: Button = %DefeatButton
 @onready var _slow_button: Button = %SlowButton
+@onready var _command_panel: CombatCommandPanel = %CombatCommandPanel
+@onready var _log_label: Label = %LogLabel
 
 
 func _ready() -> void:
@@ -44,6 +46,7 @@ func _ready() -> void:
 	_next_turn_button.pressed.connect(_on_next_turn_pressed)
 	_defeat_button.pressed.connect(_on_defeat_pressed)
 	_slow_button.pressed.connect(_on_slow_pressed)
+	_command_panel.action_confirmed.connect(_on_action_confirmed)
 	_machine.start()
 	_begin_next_turn()
 
@@ -65,12 +68,31 @@ func _begin_next_turn() -> void:
 	if _living_enemies().is_empty():
 		_machine.end_combat(CombatStateMachine.Result.VICTORY)
 		return
-	_machine.begin_turn(_queue.next_actor())
+	var actor := _queue.next_actor()
+	_machine.begin_turn(actor)
+	_next_turn_button.disabled = actor.is_ally
 	_refresh()
+	_open_commands_if_ally()
+
+
+func _open_commands_if_ally() -> void:
+	var actor := _queue.get_current_actor()
+	if actor != null and actor.is_ally and _machine.get_state() == CombatStateMachine.State.AWAITING_ACTION:
+		_command_panel.open(actor, _allies, _enemies)
+
+
+func _on_action_confirmed(action: CombatAction) -> void:
+	_log_label.text = "%s usa %s sobre %s" % [action.user.display_name, action.skill.display_name, _join_names(action.targets)]
+	_finish_turn(action)
 
 
 func _on_next_turn_pressed() -> void:
-	_machine.submit_action(null)
+	_log_label.text = "%s pasa el turno (la IA llega en la 3.7)" % _queue.get_current_actor().display_name
+	_finish_turn(null)
+
+
+func _finish_turn(action: CombatAction) -> void:
+	_machine.submit_action(action)
 	_machine.action_resolved()
 	_begin_next_turn()
 
@@ -81,6 +103,7 @@ func _on_defeat_pressed() -> void:
 			enemy.is_defeated = true
 			break
 	_refresh()
+	_open_commands_if_ally()
 
 
 func _on_slow_pressed() -> void:
@@ -89,6 +112,7 @@ func _on_slow_pressed() -> void:
 			combatant.stats.speed = maxi(0, combatant.stats.speed - slow_amount)
 			break
 	_refresh()
+	_open_commands_if_ally()
 
 
 func _on_state_changed(_from: CombatStateMachine.State, to: CombatStateMachine.State) -> void:
@@ -97,6 +121,7 @@ func _on_state_changed(_from: CombatStateMachine.State, to: CombatStateMachine.S
 
 func _on_combat_finished(result: CombatStateMachine.Result) -> void:
 	_state_label.text = "Combate terminado: %s" % CombatStateMachine.Result.keys()[result]
+	_command_panel.close()
 	for button: Button in [_next_turn_button, _defeat_button, _slow_button]:
 		button.disabled = true
 	_refresh()

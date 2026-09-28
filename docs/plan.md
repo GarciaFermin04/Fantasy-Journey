@@ -39,9 +39,11 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 - [x] **3.2 Cola de turnos por velocidad** — Más la barra visible con el orden de turnos.
 - [x] **3.3 Filas delantera y trasera** — Ubicar aliados y enemigos. Solo ciertas habilidades alcanzan la fila trasera.
   - Pendiente: no hay cambio de fila manual; "empujar" y "cambiar de fila" serán efectos de habilidad (a sumar junto con los demás efectos de habilidad).
-- [ ] **3.4 Menú de acciones** — Habilidad y objeto. Todo con teclado.
+- [x] **3.4 Menú de acciones** — Habilidad y objeto. Todo con teclado.
+  - "Objeto" queda visible y deshabilitado hasta que existan los consumibles.
 - [ ] **3.5 Fórmula de daño** — Base + afinidad (+15%) + debilidad o resistencia + reducción por fila trasera.
 - [ ] **3.6 Vida, maná y estamina** — La estamina recupera por turno, el maná no. Cooldowns por turnos.
+  - Deshabilitar en el menú las habilidades sin recursos suficientes o en enfriamiento.
 - [ ] **3.7 IA enemiga simple** — Elegir habilidad y objetivo con reglas básicas.
   - Tener en cuenta: la fila delantera recibe más ataques (diseño).
 - [ ] **3.8 Transición sin corte** — Tocar enemigo, la cámara enfoca la sala, aparece la UI y las unidades se acomodan.

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/combat/combat_command_panel.gd" id="1_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/combat/action_menu.tscn" id="2_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/combat/target_selector.tscn" id="3_selector"]
+
+[node name="CombatCommandPanel" type="HBoxContainer"]
+theme_override_constants/separation = 8
+script = ExtResource("1_panel")
+
+[node name="ActionMenu" parent="." instance=ExtResource("2_menu")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TargetSelector" parent="." instance=ExtResource("3_selector")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
