@@ -41,7 +41,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
   - Pendiente: no hay cambio de fila manual; "empujar" y "cambiar de fila" serán efectos de habilidad (a sumar junto con los demás efectos de habilidad).
 - [x] **3.4 Menú de acciones** — Habilidad y objeto. Todo con teclado.
   - "Objeto" queda visible y deshabilitado hasta que existan los consumibles.
-- [ ] **3.5 Fórmula de daño** — Base + afinidad (+15%) + debilidad o resistencia + reducción por fila trasera.
+- [x] **3.5 Fórmula de daño** — Base (potencia × ataque / defensa) + afinidad del recluta y del arma + debilidad o resistencia.
 - [ ] **3.6 Vida, maná y estamina** — La estamina recupera por turno, el maná no. Cooldowns por turnos.
   - Deshabilitar en el menú las habilidades sin recursos suficientes o en enfriamiento.
 - [ ] **3.7 IA enemiga simple** — Elegir habilidad y objetivo con reglas básicas.

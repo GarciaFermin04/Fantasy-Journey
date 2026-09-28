@@ -1,7 +1,8 @@
 extends Control
 ## Debug scene to try the turn queue, the combat state machine, formations,
 ## valid targets, the turn order bar and the command panel with the starting
-## recruits and the test enemies. Actions have no effect yet.
+## recruits and the test enemies. Shows the calculated damage or healing of
+## each action; it is not applied to health yet.
 
 const RECRUIT_PATHS: Array[String] = [
 	"res://data/recruits/warrior.tres",
@@ -18,6 +19,8 @@ const ENEMY_PATHS: Array[String] = [
 @export var slow_amount: int = 5
 ## Maximum allied units per row.
 @export var ally_row_capacity: int = 3
+## Balance numbers for the damage formula.
+@export var combat_rules: CombatRules
 
 var _queue := TurnQueue.new()
 var _machine := CombatStateMachine.new()
@@ -39,6 +42,7 @@ var _enemies := Formation.new()
 
 
 func _ready() -> void:
+	assert(combat_rules != null, "CombatTurnsSandbox needs combat_rules")
 	_build_combatants()
 	_queue.setup(_combatants)
 	_machine.state_changed.connect(_on_state_changed)
@@ -82,7 +86,7 @@ func _open_commands_if_ally() -> void:
 
 
 func _on_action_confirmed(action: CombatAction) -> void:
-	_log_label.text = "%s usa %s sobre %s" % [action.user.display_name, action.skill.display_name, _join_names(action.targets)]
+	_log_label.text = "%s usa %s → %s" % [action.user.display_name, action.skill.display_name, _describe_results(action)]
 	_finish_turn(action)
 
 
@@ -139,6 +143,26 @@ func _refresh() -> void:
 	_formation_label.text = "Aliados — %s
 Enemigos — %s" % [_describe_formation(_allies), _describe_formation(_enemies)]
 	_targets_label.text = _describe_targets(actor)
+
+
+func _describe_results(action: CombatAction) -> String:
+	var kind := "de curación" if action.skill.effect == SkillData.Effect.HEAL else "de daño"
+	var parts: PackedStringArray = []
+	for target in action.targets:
+		var amount := DamageCalculator.get_amount(action.skill, action.user, target, combat_rules)
+		parts.append("%s: %d %s%s" % [target.display_name, amount, kind, _reaction_text(action.skill, target)])
+	return " · ".join(parts)
+
+
+func _reaction_text(skill: SkillData, target: Combatant) -> String:
+	if skill.effect == SkillData.Effect.HEAL:
+		return ""
+	match target.get_reaction(skill.affinity):
+		EnemyData.AffinityReaction.WEAK:
+			return " (débil)"
+		EnemyData.AffinityReaction.RESISTANT:
+			return " (resiste)"
+	return ""
 
 
 func _describe_formation(formation: Formation) -> String:

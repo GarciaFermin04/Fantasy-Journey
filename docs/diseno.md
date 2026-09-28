@@ -100,7 +100,7 @@ El combate se plantea por turnos individuales. En lugar de elegir acciones para 
 ## Posicionamiento
 _Dos filas: delantera y trasera_
 
-Cada bando se ubica en dos filas. Los personajes de la fila delantera reciben más ataques y protegen a los de atrás; la fila trasera recibe menos daño y es ideal para magos y arqueros. Algunas habilidades pueden golpear a la fila trasera, empujar o cambiar de fila. Aporta decisiones tácticas sin la complejidad de un sistema de casillas. Al iniciar el combate, los personajes se acomodan en sus filas dentro de la arena de la sala.
+Cada bando se ubica en dos filas. Los personajes de la fila delantera reciben más ataques y protegen a los de atrás; la fila trasera está protegida porque muchas habilidades no la alcanzan (no reduce el daño recibido) y es ideal para magos y arqueros. Algunas habilidades pueden golpear a la fila trasera, empujar o cambiar de fila. Aporta decisiones tácticas sin la complejidad de un sistema de casillas. Al iniciar el combate, los personajes se acomodan en sus filas dentro de la arena de la sala.
 
 ## Recursos de Combate
 _Maná, estamina y restricciones por turnos_

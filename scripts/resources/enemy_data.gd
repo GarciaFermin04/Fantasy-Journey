@@ -41,11 +41,17 @@ enum TargetPreference { RANDOM, LOWEST_HP }
 ## Returns how this enemy reacts to [param skill_affinity].
 ## A null affinity (neutral skill) is always [constant AffinityReaction.NEUTRAL].
 func get_reaction(skill_affinity: AffinityData) -> AffinityReaction:
+	return reaction_for(skill_affinity, weaknesses, resistances)
+
+
+## Returns the reaction to [param skill_affinity] given lists of
+## [param weak_to] and [param resistant_to] affinities.
+static func reaction_for(skill_affinity: AffinityData, weak_to: Array[AffinityData], resistant_to: Array[AffinityData]) -> AffinityReaction:
 	if skill_affinity == null:
 		return AffinityReaction.NEUTRAL
-	if weaknesses.has(skill_affinity):
+	if weak_to.has(skill_affinity):
 		return AffinityReaction.WEAK
-	if resistances.has(skill_affinity):
+	if resistant_to.has(skill_affinity):
 		return AffinityReaction.RESISTANT
 	return AffinityReaction.NEUTRAL
 

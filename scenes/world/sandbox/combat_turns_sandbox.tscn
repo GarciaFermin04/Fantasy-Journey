@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/world/sandbox/combat_turns_sandbox.gd" id="1_sandbox"]
 [ext_resource type="PackedScene" path="res://scenes/ui/combat/turn_order_bar.tscn" id="2_bar"]
 [ext_resource type="PackedScene" path="res://scenes/ui/combat/combat_command_panel.tscn" id="3_panel"]
+[ext_resource type="Resource" path="res://data/combat/combat_rules.tres" id="4_rules"]
 
 [node name="CombatTurnsSandbox" type="Control"]
 layout_mode = 3
@@ -12,6 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sandbox")
+combat_rules = ExtResource("4_rules")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1

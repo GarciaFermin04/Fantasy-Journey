@@ -63,6 +63,31 @@ func test_from_recruit_uses_preferred_row_and_equipped_skills() -> void:
 	assert_eq(combatant.skills, [skill] as Array[SkillData])
 
 
+func test_from_recruit_keeps_affinity_and_weapon() -> void:
+	var recruit := _make_recruit(10)
+	recruit.affinity = AffinityData.new()
+	var weapon := WeaponData.new()
+	var combatant := Combatant.from_recruit(recruit, weapon, 0)
+	assert_eq(combatant.affinity, recruit.affinity)
+	assert_eq(combatant.weapon, weapon)
+	assert_eq(combatant.weaknesses.size(), 0)
+
+
+func test_from_enemy_keeps_affinity_and_reactions() -> void:
+	var enemy := _make_enemy(6)
+	var fire := AffinityData.new()
+	var water := AffinityData.new()
+	enemy.affinity = fire
+	enemy.weaknesses = [water]
+	enemy.resistances = [fire]
+	var combatant := Combatant.from_enemy(enemy, 0)
+	assert_eq(combatant.affinity, fire)
+	assert_null(combatant.weapon)
+	assert_eq(combatant.get_reaction(water), EnemyData.AffinityReaction.WEAK)
+	assert_eq(combatant.get_reaction(fire), EnemyData.AffinityReaction.RESISTANT)
+	assert_eq(combatant.get_reaction(null), EnemyData.AffinityReaction.NEUTRAL)
+
+
 func test_from_enemy_uses_preferred_row_and_skills() -> void:
 	var enemy := _make_enemy(6)
 	var entry := EnemySkillEntry.new()
