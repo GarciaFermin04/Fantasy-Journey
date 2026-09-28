@@ -25,7 +25,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 ## Etapa 2: Datos del juego (~15 h)
 **Lista cuando:** guerrero, mago y arquero existen como archivos de datos con sus armas y habilidades.
 
-- [ ] **2.1 Resource de Habilidad** — Coste de maná o estamina, cooldown, daño, afinidad y a qué fila puede apuntar.
+- [x] **2.1 Resource de Habilidad** — Coste de maná o estamina, cooldown, daño, afinidad y a qué fila puede apuntar.
 - [ ] **2.2 Resource de Arma y Variante** — Tipo y habilidades base. La variante suma stats y habilidades extra.
 - [ ] **2.3 Resource de Recluta** — Stats, afinidad, armas permitidas, habilidades propias y rasgo de exploración.
 - [ ] **2.4 Resource de Enemigo** — Stats, debilidades, resistencias, habilidades y patrón simple de IA.
