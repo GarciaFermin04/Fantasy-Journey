@@ -48,6 +48,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 **Lista cuando:** jugás un piso completo con salas variables, loot temporal y un jefe al final.
 
 - [ ] **4.1 Plantillas de sala** — Combate, tesoro, descanso, evento, recluta y jefe. Cada una es una escena hecha a mano.
+  - Pendiente: la pared del lado de la cámara hoy es baja (0,5 m) como solución de prototipo. La preferencia es reemplazarla por paredes que se vuelven transparentes cuando tapan al líder.
 - [ ] **4.2 Generador de piso híbrido** — Orden variable de salas: camino principal + ramas opcionales.
 - [ ] **4.3 Puertas y paso entre salas** — Entrar y salir de salas sin cortes bruscos.
 - [ ] **4.4 Sala de descanso** — Recupera vida y maná. Clave para que el maná sin recarga funcione.
