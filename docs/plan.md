@@ -26,7 +26,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 **Lista cuando:** guerrero, mago y arquero existen como archivos de datos con sus armas y habilidades.
 
 - [x] **2.1 Resource de Habilidad** — Coste de maná o estamina, cooldown, daño, afinidad y a qué fila puede apuntar.
-- [ ] **2.2 Resource de Arma y Variante** — Tipo y habilidades base. La variante suma stats y habilidades extra.
+- [x] **2.2 Resource de Arma y Variante** — Tipo y habilidades base. La variante suma stats y habilidades extra.
 - [ ] **2.3 Resource de Recluta** — Stats, afinidad, armas permitidas, habilidades propias y rasgo de exploración.
 - [ ] **2.4 Resource de Enemigo** — Stats, debilidades, resistencias, habilidades y patrón simple de IA.
 - [ ] **2.5 Crear los 3 reclutas** — Guerrero con espada, mago con varita, arquero con arco. 4-5 habilidades equipadas cada uno.
