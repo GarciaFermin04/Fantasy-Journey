@@ -4,6 +4,8 @@
 [ext_resource type="Material" uid="uid://b7vd1qksv45jj" path="res://assets/materials/greybox_wall.tres" id="2_bdhnp"]
 [ext_resource type="Material" uid="uid://d3wfk7awrmd1b" path="res://assets/materials/greybox_obstacle.tres" id="3_ohcq1"]
 [ext_resource type="PackedScene" uid="uid://dler7c2hsbdac" path="res://scenes/agents/party/party_leader.tscn" id="4_bdhnp"]
+[ext_resource type="PackedScene" uid="uid://l87uf1u8q4av" path="res://scenes/camera/main_camera.tscn" id="5_5xg5r"]
+[ext_resource type="PackedScene" uid="uid://fq3kytqs5b38" path="res://scenes/camera/exploration_camera.tscn" id="6_3objo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5xg5r"]
 
@@ -66,12 +68,16 @@ material = ExtResource("3_ohcq1")
 transform = Transform3D(0.8660254, -0.38302222, 0.32139382, 0, 0.64278764, 0.76604444, -0.5, -0.66341394, 0.5566704, 0, 0, 0)
 shadow_enabled = true
 
-[node name="PreviewCamera" type="Camera3D" parent="." unique_id=1589919218]
-transform = Transform3D(1, 0, 0, 0, 0.66913056, 0.74314487, 0, -0.74314487, 0.66913056, 0, 13, 12)
-current = true
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=460378261]
 environment = SubResource("Environment_a1sms")
 
 [node name="PartyLeader" parent="." unique_id=1469255191 instance=ExtResource("4_bdhnp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="MainCamera" parent="." unique_id=1523240513 instance=ExtResource("5_5xg5r")]
+transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.64278764, 0, -0.64278764, 0.76604444, 0, 0, 0)
+top_level = true
+fov = 59.11644
+
+[node name="ExplorationCamera" parent="." unique_id=66837185 node_paths=PackedStringArray("follow_target") instance=ExtResource("6_3objo")]
+follow_target = NodePath("../PartyLeader")

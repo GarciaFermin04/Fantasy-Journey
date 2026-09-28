@@ -18,7 +18,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
 - [x] **1.2 Personaje sprite billboard** — Sprite3D con un rectángulo de color. Se reemplaza cuando haya arte.
 - [x] **1.3 Movimiento con teclado** — 8 direcciones y colisiones con paredes.
   - Input Map: `move_up/down/left/right` (WASD + flechas), `interact` (E, Enter, Enter numérico).
-- [ ] **1.4 Cámara fija inclinada** — Vista picada que sigue al líder, sin rotación libre. Es la base del estilo HeartGold/Platino.
+- [x] **1.4 Cámara fija inclinada** — Vista picada que sigue al líder, sin rotación libre. Es la base del estilo HeartGold/Platino.
 - [ ] **1.5 Party que sigue al líder** — Los otros 2 reclutas caminan detrás. Si complica, mostrar solo al líder por ahora.
 - [ ] **1.6 Interacción básica** — InteractableComponent reutilizable + un objeto de prueba en la sala. Tecla de interacción, mostrar un aviso simple al acercarse y una respuesta al interactuar (print o label). Es la base para cofres, runas y NPCs.
 

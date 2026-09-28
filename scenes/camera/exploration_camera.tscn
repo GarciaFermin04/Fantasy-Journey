@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://fq3kytqs5b38"]
+
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="1_ysory"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="2_a2i5k"]
+[ext_resource type="Script" uid="uid://b8hhnqsugykly" path="res://addons/phantom_camera/scripts/resources/camera_3d_resource.gd" id="3_b54fe"]
+
+[sub_resource type="Resource" id="Resource_fis01"]
+script = ExtResource("2_a2i5k")
+
+[sub_resource type="Resource" id="Resource_prvlu"]
+script = ExtResource("3_b54fe")
+fov = 40.0
+
+[node name="ExplorationCamera" type="Node3D" unique_id=66837185]
+transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 0, 0)
+top_level = true
+script = ExtResource("1_ysory")
+priority = 10
+follow_mode = 2
+tween_resource = SubResource("Resource_fis01")
+camera_3d_resource = SubResource("Resource_prvlu")
+follow_offset = Vector3(0, 7, 8.5)
+follow_damping = true

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://l87uf1u8q4av"]
+
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="1_fckv4"]
+
+[node name="MainCamera" type="Camera3D" unique_id=1523240513]
+current = true
+
+[node name="PhantomCameraHost" type="Node" parent="." unique_id=627763302]
+script = ExtResource("1_fckv4")
