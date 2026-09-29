@@ -28,6 +28,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		_current.interact(actor)
 
 
+## Enables or disables interacting. While disabled the prompt is hidden and
+## the interact action is ignored.
+func set_enabled(enabled: bool) -> void:
+	set_physics_process(enabled)
+	set_process_unhandled_input(enabled)
+	if not enabled:
+		_select(null)
+
+
 func _on_area_entered(area: Area3D) -> void:
 	if area is InteractableComponent:
 		_candidates.append(area)

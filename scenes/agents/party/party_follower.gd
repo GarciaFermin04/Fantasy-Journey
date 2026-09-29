@@ -2,6 +2,9 @@ class_name PartyFollower
 extends CharacterBody3D
 ## Party member that walks towards a point given by its parent Party.
 
+## Recruit this party member represents in combat.
+@export var recruit: RecruitData
+
 ## Maximum movement speed in meters per second. Higher than the leader's
 ## so the follower never falls behind.
 @export var move_speed: float = 6.0

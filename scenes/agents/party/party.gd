@@ -15,6 +15,7 @@ extends Node3D
 @export var trail_max_points: int = 64
 
 var _trail: PositionTrail
+var _following_enabled: bool = true
 
 
 func _ready() -> void:
@@ -28,9 +29,21 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if not _following_enabled:
+		return
 	_trail.record(leader.global_position)
 	for i in followers.size():
 		followers[i].set_follow_target(_trail.sample_at_distance(_distance_for(i)))
+
+
+## Enables or disables exploration: player control of the leader and the
+## followers walking behind it. Disabled, everyone stays where they are.
+func set_exploration_enabled(enabled: bool) -> void:
+	leader.set_controls_enabled(enabled)
+	_following_enabled = enabled
+	if not enabled:
+		for follower in followers:
+			follower.set_follow_target(follower.global_position)
 
 
 func _distance_for(index: int) -> float:

@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://dvaf0dw0ipy70" path="res://scenes/agents/party/party_follower.tscn" id="3_bcjre"]
 [ext_resource type="Texture2D" uid="uid://bulf85vkk53ht" path="res://assets/sprites/recruits/placeholder_recruit_2.tres" id="4_tex2"]
 [ext_resource type="Texture2D" uid="uid://k17u2lt1b4yr" path="res://assets/sprites/recruits/placeholder_recruit_3.tres" id="5_tex3"]
+[ext_resource type="Resource" path="res://data/recruits/warrior.tres" id="6_warrior"]
+[ext_resource type="Resource" path="res://data/recruits/archer.tres" id="7_archer"]
+[ext_resource type="Resource" path="res://data/recruits/mage.tres" id="8_mage"]
 
 [node name="Party" type="Node3D" unique_id=1709499743 node_paths=PackedStringArray("leader", "followers")]
 script = ExtResource("1_hceet")
@@ -12,15 +15,18 @@ leader = NodePath("PartyLeader")
 followers = [NodePath("Follower1"), NodePath("Follower2")]
 
 [node name="PartyLeader" parent="." unique_id=1469255191 instance=ExtResource("2_xytwn")]
+recruit = ExtResource("6_warrior")
 
 [node name="Follower1" parent="." unique_id=616571825 instance=ExtResource("3_bcjre")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.2)
+recruit = ExtResource("7_archer")
 
 [node name="RecruitVisual" parent="Follower1" index="1" unique_id=315995430]
 texture = ExtResource("4_tex2")
 
 [node name="Follower2" parent="." unique_id=1533269354 instance=ExtResource("3_bcjre")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4)
+recruit = ExtResource("8_mage")
 
 [node name="RecruitVisual" parent="Follower2" index="1" unique_id=315995430]
 texture = ExtResource("5_tex3")

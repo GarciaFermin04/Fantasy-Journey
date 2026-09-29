@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/agents/enemies/common/room_enemy.gd" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/agents/recruits/recruit_visual.tscn" id="2_visual"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/placeholder_enemy.tres" id="3_tex"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_contact"]
+radius = 0.6
+
+[node name="RoomEnemy" type="Node3D"]
+script = ExtResource("1_enemy")
+
+[node name="RecruitVisual" parent="." instance=ExtResource("2_visual")]
+unique_name_in_owner = true
+texture = ExtResource("3_tex")
+
+[node name="NameLabel" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
+billboard = 1
+font_size = 40
+outline_size = 12
+
+[node name="ContactArea" type="Area3D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContactArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_contact")

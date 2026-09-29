@@ -46,7 +46,10 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
   - Deshabilitar en el menú las habilidades sin recursos suficientes o en enfriamiento. (Hecho.)
 - [x] **3.7 IA enemiga simple** — Elegir habilidad y objetivo con reglas básicas.
   - La fila delantera recibe más ataques: pesa el doble para los enemigos que eligen al azar.
-- [ ] **3.8 Transición sin corte** — Tocar enemigo, la cámara enfoca la sala, aparece la UI y las unidades se acomodan.
+- [~] **3.8 Transición sin corte** — Tocar enemigo, la cámara enfoca la sala, aparece la UI y las unidades se acomodan.
+  - [x] 3.8a Enemigos visibles en la sala; al tocar uno se suman los cercanos (radio) y se congela la exploración.
+  - [ ] 3.8b Arena alrededor del choque (izquierda/derecha en pantalla), controlador de combate, cámara de combate y HUD.
+  - [ ] 3.8c Fin del combate: victoria (vuelve la exploración) o derrota (recarga la sala); números de daño.
 - [ ] **3.9 Sorpresa y emboscada** — Atacar por la espalda da ventaja. Ser emboscado da el primer turno al enemigo.
 
 ## Etapa 4: Primer piso de la Torre (~40 h)
