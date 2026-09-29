@@ -1,6 +1,6 @@
 # 016 - Combate en la sala (transición sin corte)
 
-**Fecha:** 2026-09-29 · **Tarea:** 3.8a y 3.8b
+**Fecha:** 2026-09-29 · **Tarea:** 3.8a, 3.8b y 3.8c
 
 ## Reglas de diseño definidas
 - **Cada enemigo visible es una unidad.** Al tocar uno, entran al combate los enemigos dentro de un radio del tocado (`encounter_radius`, 6 m en la sala de prueba).
@@ -19,6 +19,13 @@
 - `CombatText` (`scripts/utils/`): textos de estado y resultados compartidos por las pantallas de combate.
 - `Party.set_exploration_enabled(false)` también apaga el `_physics_process` de los miembros para que el `Tween` pueda moverlos.
 
+## Fin del combate (3.8c)
+- Se muestra "¡Victoria!" o "Derrota..." durante 1,2 s.
+- **Victoria:** la cámara de combate baja su prioridad (vuelve la de exploración), se oculta el HUD, los enemigos derrotados se eliminan de la sala, los demás vuelven a poder disparar encuentros y la party retoma el control; el rastro de los seguidores se reinicia detrás del líder.
+- **Derrota:** mensaje y recarga de la sala.
+- Números de daño flotantes (`DamageNumber`): blanco daño, naranja con "!" débil, gris resistido, verde "+" curación.
+- Enemigos derrotados se desvanecen del todo; aliados derrotados quedan semitransparentes y vuelven a verse normales al ganar.
+- Vida y maná todavía no se arrastran entre combates (falta el estado de la run, 4.4).
+
 ## Pendiente
 - Ajuste fino de presentación: el nombre de una unidad puede superponerse con la de atrás, y una unidad puede quedar delante de un obstáculo. Revisar cuando haya arte (7.1) o antes si molesta.
-- Regreso a la exploración, derrota y números de daño: 3.8c.

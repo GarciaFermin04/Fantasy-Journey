@@ -1,10 +1,15 @@
 extends Node3D
 ## Greybox test room. When the party leader touches a visible enemy it
 ## gathers the nearby enemies, freezes exploration and starts the combat
-## around the collision point. Returning to exploration comes in 3.8c.
+## around the collision point. On victory the defeated enemies are removed
+## and exploration resumes; on defeat the room is reloaded.
 
 ## Enemies within this distance (meters) of the touched one join the combat.
 @export var encounter_radius: float = 6.0
+## Seconds the defeat message stays before the room reloads.
+@export var defeat_reload_delay: float = 1.5
+## Message shown before reloading after a defeat.
+@export var defeat_message: String = "Derrota. Reiniciando la sala..."
 
 var _in_encounter: bool = false
 
@@ -36,9 +41,20 @@ func _on_enemy_touched(touched_enemy: RoomEnemy) -> void:
 	_combat_controller.start_combat(_party, participants, center, leader_position.x <= touched_position.x)
 
 
-func _on_combat_finished(result: CombatStateMachine.Result) -> void:
-	_encounter_label.text = "Combate terminado: %s" % CombatStateMachine.Result.keys()[result]
-	_encounter_label.show()
+func _on_combat_finished(result: CombatStateMachine.Result, defeated_enemies: Array[RoomEnemy]) -> void:
+	if result == CombatStateMachine.Result.DEFEAT:
+		_encounter_label.text = defeat_message
+		_encounter_label.show()
+		await get_tree().create_timer(defeat_reload_delay).timeout
+		get_tree().reload_current_scene()
+		return
+	for enemy in defeated_enemies:
+		enemy.queue_free()
+	for enemy in _room_enemies():
+		if not defeated_enemies.has(enemy):
+			enemy.set_contact_enabled(true)
+	_party.set_exploration_enabled(true)
+	_in_encounter = false
 
 
 func _gather_participants(touched_enemy: RoomEnemy) -> Array[RoomEnemy]:

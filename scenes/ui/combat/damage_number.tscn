@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/combat/damage_number.gd" id="1_number"]
+
+[node name="DamageNumber" type="Label3D"]
+billboard = 1
+no_depth_test = true
+font_size = 64
+outline_size = 18
+script = ExtResource("1_number")

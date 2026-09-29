@@ -43,6 +43,8 @@ func set_exploration_enabled(enabled: bool) -> void:
 	leader.set_controls_enabled(enabled)
 	leader.set_physics_process(enabled)
 	_following_enabled = enabled
+	if enabled:
+		_trail.reset(leader.global_position, Vector3.BACK, follow_spacing * followers.size())
 	for follower in followers:
 		follower.set_follow_target(follower.global_position)
 		follower.set_physics_process(enabled)

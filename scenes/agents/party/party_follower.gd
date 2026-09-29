@@ -2,6 +2,11 @@ class_name PartyFollower
 extends CharacterBody3D
 ## Party member that walks towards a point given by its parent Party.
 
+## Opacity of the member while defeated in combat.
+const DEFEATED_ALPHA: float = 0.35
+## Seconds the defeat fade takes.
+const DEFEAT_FADE_DURATION: float = 0.5
+
 ## Recruit this party member represents in combat.
 @export var recruit: RecruitData
 
@@ -10,6 +15,8 @@ extends CharacterBody3D
 @export var move_speed: float = 6.0
 
 var _follow_target: Vector3 = Vector3.ZERO
+
+@onready var _visual: RecruitVisual = %RecruitVisual
 
 
 func _ready() -> void:
@@ -28,3 +35,11 @@ func _physics_process(delta: float) -> void:
 ## Sets the world position this follower walks towards.
 func set_follow_target(point: Vector3) -> void:
 	_follow_target = point
+
+
+## Shows or hides the defeated look: the member turns semi-transparent.
+func set_defeated_look(defeated: bool) -> void:
+	if defeated:
+		_visual.fade_to(DEFEATED_ALPHA, DEFEAT_FADE_DURATION)
+	else:
+		_visual.reset_fade()

@@ -3,15 +3,18 @@ extends Node3D
 ## Runs a combat inside the room: builds the combatants from the party and the
 ## touched enemies, moves every unit to its arena slot around the collision
 ## point, switches to the combat camera and shows the HUD. The rules live in
-## CombatSession; this node only presents them.
+## CombatSession; this node only presents them. When the combat ends it
+## shows the result, restores the exploration camera and reports which room
+## enemies were defeated so the room can remove them.
 
-## Emitted when the combat ends.
-signal combat_finished(result: CombatStateMachine.Result)
+## Emitted after the combat ends and its presentation is cleaned up.
+signal combat_finished(result: CombatStateMachine.Result, defeated_enemies: Array[RoomEnemy])
 
 const _UNIT_HEIGHT: float = 1.4
 const _WORLD_LAYER: int = 1
 const _SIDE_LEFT: float = -1.0
 const _SIDE_RIGHT: float = 1.0
+const _IDLE_CAMERA_PRIORITY: int = 0
 
 ## Balance numbers of the combat.
 @export var combat_rules: CombatRules
@@ -33,6 +36,16 @@ const _SIDE_RIGHT: float = 1.0
 @export var combat_camera_priority: int = 20
 ## Seconds an enemy waits before acting, so its turn can be followed.
 @export var enemy_turn_delay: float = 0.8
+## Scene of the floating damage numbers.
+@export var damage_number_scene: PackedScene
+## Height over a unit's feet where damage numbers appear, in meters.
+@export var damage_number_height: float = 2.0
+## Seconds the result message stays before leaving the combat.
+@export var end_delay: float = 1.2
+## Message shown on victory.
+@export var victory_text: String = "¡Victoria!"
+## Message shown on defeat.
+@export var defeat_text: String = "Derrota..."
 
 var _session: CombatSession = null
 var _nodes: Dictionary[Combatant, Node3D] = {}
@@ -45,6 +58,7 @@ var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	assert(combat_rules != null, "CombatController needs combat_rules")
+	assert(damage_number_scene != null, "CombatController needs damage_number_scene")
 	_rng.randomize()
 	_hud.action_confirmed.connect(_on_action_confirmed)
 	_enemy_turn_timer.timeout.connect(_on_enemy_turn_timer_timeout)
@@ -147,12 +161,39 @@ func _on_enemy_turn_timer_timeout() -> void:
 func _on_action_performed(action: CombatAction, results: Array[ActionResult]) -> void:
 	_hud.show_log(CombatText.describe_action(action, results))
 	for result in results:
+		var node := _nodes[result.target]
+		_spawn_damage_number(result, node.global_position)
 		if result.defeated:
-			_nodes[result.target].hide()
+			_set_defeated_look(node, true)
+
+
+func _spawn_damage_number(result: ActionResult, at: Vector3) -> void:
+	var number := damage_number_scene.instantiate() as DamageNumber
+	add_child(number)
+	number.global_position = at + Vector3.UP * damage_number_height
+	number.show_result(result)
+
+
+func _set_defeated_look(node: Node3D, defeated: bool) -> void:
+	assert(node.has_method(&"set_defeated_look"), "%s has no set_defeated_look()" % node.name)
+	node.call(&"set_defeated_look", defeated)
 
 
 func _on_combat_finished(result: CombatStateMachine.Result) -> void:
 	_enemy_turn_timer.stop()
 	_hud.close_commands()
 	_hud.refresh(_session)
-	combat_finished.emit(result)
+	_hud.show_log(victory_text if result == CombatStateMachine.Result.VICTORY else defeat_text)
+	await get_tree().create_timer(end_delay).timeout
+	_hud.hide()
+	_camera.priority = _IDLE_CAMERA_PRIORITY
+	var defeated_enemies: Array[RoomEnemy] = []
+	for combatant in _nodes:
+		var node := _nodes[combatant]
+		if combatant.is_ally:
+			_set_defeated_look(node, false)
+		elif combatant.is_defeated:
+			defeated_enemies.append(node as RoomEnemy)
+	_session = null
+	_nodes.clear()
+	combat_finished.emit(result, defeated_enemies)

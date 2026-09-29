@@ -8,6 +8,8 @@ signal touched(enemy: RoomEnemy)
 
 ## Data of the enemy this visible unit represents in combat.
 @export var enemy_data: EnemyData
+## Seconds the defeat fade takes.
+@export var defeat_fade_duration: float = 0.5
 
 @onready var _visual: RecruitVisual = %RecruitVisual
 @onready var _name_label: Label3D = %NameLabel
@@ -25,6 +27,15 @@ func _ready() -> void:
 ## Enables or disables starting encounters by touch.
 func set_contact_enabled(enabled: bool) -> void:
 	_contact_area.set_deferred(&"monitoring", enabled)
+
+
+## Shows or hides the defeated look: the enemy fades out completely.
+func set_defeated_look(defeated: bool) -> void:
+	_name_label.visible = not defeated
+	if defeated:
+		_visual.fade_to(0.0, defeat_fade_duration)
+	else:
+		_visual.reset_fade()
 
 
 func _on_body_entered(_body: Node3D) -> void:

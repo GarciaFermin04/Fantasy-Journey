@@ -16,3 +16,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_o56gy")
 
 [node name="RecruitVisual" parent="." unique_id=315995430 instance=ExtResource("2_tef7e")]
+unique_name_in_owner = true
