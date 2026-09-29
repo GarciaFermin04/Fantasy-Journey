@@ -1,9 +1,7 @@
 extends Control
-## Debug scene to try the combat logic with the starting recruits and the
-## test enemies: turn queue, state machine, formations, valid targets, turn
-## order bar, command panel and action resolution (damage, healing, costs,
-## stamina regen, cooldowns, victory/defeat) and the enemy AI, which acts on
-## its own after a short delay.
+## Debug scene to try the combat logic (CombatSession) without 3D, with the
+## starting recruits and the test enemies: turn order bar, command panel,
+## enemy AI after a short delay, resources, targets and debug buttons.
 
 const RECRUIT_PATHS: Array[String] = [
 	"res://data/recruits/warrior.tres",
@@ -18,18 +16,13 @@ const ENEMY_PATHS: Array[String] = [
 
 ## Speed removed by the "Bajar velocidad" button.
 @export var slow_amount: int = 5
-## Maximum allied units per row.
-@export var ally_row_capacity: int = 3
 ## Balance numbers for the combat formulas.
 @export var combat_rules: CombatRules
 ## Seconds an enemy waits before acting, so its turn can be followed.
 @export var enemy_turn_delay: float = 0.8
 
-var _queue := TurnQueue.new()
-var _machine := CombatStateMachine.new()
+var _session: CombatSession
 var _combatants: Array[Combatant] = []
-var _allies: Formation
-var _enemies := Formation.new()
 var _rng := RandomNumberGenerator.new()
 
 @onready var _bar: TurnOrderBar = %TurnOrderBar
@@ -48,109 +41,78 @@ var _rng := RandomNumberGenerator.new()
 func _ready() -> void:
 	assert(combat_rules != null, "CombatTurnsSandbox needs combat_rules")
 	_rng.randomize()
-	_build_combatants()
-	_queue.setup(_combatants)
-	_machine.state_changed.connect(_on_state_changed)
-	_machine.combat_finished.connect(_on_combat_finished)
-	_enemy_turn_timer.timeout.connect(_on_enemy_turn_timer_timeout)
+	_session = CombatSession.new(combat_rules)
+	_session.turn_started.connect(_on_turn_started)
+	_session.action_performed.connect(_on_action_performed)
+	_session.combat_finished.connect(_on_combat_finished)
 	_defeat_button.pressed.connect(_on_defeat_pressed)
 	_slow_button.pressed.connect(_on_slow_pressed)
-	_command_panel.action_confirmed.connect(_on_action_confirmed)
-	_machine.start()
-	_begin_next_turn()
-
-
-func _build_combatants() -> void:
-	_allies = Formation.new(ally_row_capacity)
+	_command_panel.action_confirmed.connect(_session.perform)
+	_enemy_turn_timer.timeout.connect(_on_enemy_turn_timer_timeout)
+	var allies: Array[Combatant] = []
 	for i in RECRUIT_PATHS.size():
 		var recruit := load(RECRUIT_PATHS[i]) as RecruitData
-		var ally := Combatant.from_recruit(recruit, recruit.default_weapon, i)
-		_combatants.append(ally)
-		_allies.add(ally)
+		allies.append(Combatant.from_recruit(recruit, recruit.default_weapon, i))
+	var enemies: Array[Combatant] = []
 	for i in ENEMY_PATHS.size():
-		var enemy := Combatant.from_enemy(load(ENEMY_PATHS[i]) as EnemyData, i)
-		_combatants.append(enemy)
-		_enemies.add(enemy)
+		enemies.append(Combatant.from_enemy(load(ENEMY_PATHS[i]) as EnemyData, i))
+	_combatants = allies.duplicate()
+	_combatants.append_array(enemies)
+	_state_label.text = "Combate en curso"
+	_session.start(allies, enemies)
 
 
-func _begin_next_turn() -> void:
-	var outcome := CombatOutcome.evaluate(_allies, _enemies)
-	if outcome != CombatStateMachine.Result.NONE:
-		_machine.end_combat(outcome)
-		return
-	var actor := _queue.next_actor()
-	actor.start_turn(combat_rules)
-	_machine.begin_turn(actor)
+func _on_turn_started(actor: Combatant) -> void:
 	_refresh()
 	if actor.is_ally:
-		_open_commands_if_ally()
+		_command_panel.open(actor, _session.get_allies(), _session.get_enemies(), combat_rules)
 	else:
 		_enemy_turn_timer.start(enemy_turn_delay)
 
 
-func _open_commands_if_ally() -> void:
-	var actor := _queue.get_current_actor()
-	if actor != null and actor.is_ally and _machine.get_state() == CombatStateMachine.State.AWAITING_ACTION:
-		_command_panel.open(actor, _allies, _enemies, combat_rules)
-
-
-func _on_action_confirmed(action: CombatAction) -> void:
-	_perform(action)
-
-
 func _on_enemy_turn_timer_timeout() -> void:
-	if _machine.get_state() != CombatStateMachine.State.AWAITING_ACTION:
+	if not _session.is_awaiting_action():
 		return
-	var actor := _queue.get_current_actor()
-	var action := EnemyAI.choose_action(actor, _enemies, _allies, combat_rules, _rng)
+	var actor := _session.get_current_actor()
+	var action := EnemyAI.choose_action(actor, _session.get_enemies(), _session.get_allies(), combat_rules, _rng)
 	if action == null:
 		_log_label.text = "%s no puede actuar y pasa el turno" % actor.display_name
-		_machine.submit_action(null)
-		_finish_turn()
-		return
-	_perform(action)
+		_session.pass_turn()
+	else:
+		_session.perform(action)
 
 
-func _perform(action: CombatAction) -> void:
-	_machine.submit_action(action)
-	var results := ActionResolver.resolve(action, combat_rules)
+func _on_action_performed(action: CombatAction, results: Array[ActionResult]) -> void:
 	_log_label.text = "%s usa %s → %s" % [action.user.display_name, action.skill.display_name, _describe_results(results)]
-	_finish_turn()
-
-
-func _finish_turn() -> void:
-	_machine.action_resolved()
-	_queue.get_current_actor().end_turn()
-	_begin_next_turn()
 
 
 func _on_defeat_pressed() -> void:
-	for enemy in _enemies.get_living():
-		if enemy != _queue.get_current_actor():
+	for enemy in _session.get_enemies().get_living():
+		if enemy != _session.get_current_actor():
 			enemy.take_damage(enemy.current_hp)
 			break
-	if CombatOutcome.evaluate(_allies, _enemies) != CombatStateMachine.Result.NONE:
+	if CombatOutcome.evaluate(_session.get_allies(), _session.get_enemies()) != CombatStateMachine.Result.NONE:
 		_command_panel.close()
-		_enemy_turn_timer.stop()
 		_log_label.text = "Último enemigo derrotado con el botón de depuración"
-		_machine.submit_action(null)
-		_finish_turn()
+		_session.pass_turn()
 		return
 	_refresh()
-	_open_commands_if_ally()
+	_reopen_commands()
 
 
 func _on_slow_pressed() -> void:
-	for combatant in _queue.get_remaining_this_round():
+	for combatant in _session.get_queue().get_remaining_this_round():
 		if not combatant.is_ally:
 			combatant.stats.speed = maxi(0, combatant.stats.speed - slow_amount)
 			break
 	_refresh()
-	_open_commands_if_ally()
+	_reopen_commands()
 
 
-func _on_state_changed(_from: CombatStateMachine.State, to: CombatStateMachine.State) -> void:
-	_state_label.text = "Estado: %s" % CombatStateMachine.State.keys()[to]
+func _reopen_commands() -> void:
+	var actor := _session.get_current_actor()
+	if actor != null and actor.is_ally and _session.is_awaiting_action():
+		_command_panel.open(actor, _session.get_allies(), _session.get_enemies(), combat_rules)
 
 
 func _on_combat_finished(result: CombatStateMachine.Result) -> void:
@@ -163,14 +125,16 @@ func _on_combat_finished(result: CombatStateMachine.Result) -> void:
 
 
 func _refresh() -> void:
-	_bar.display(_queue.get_current_actor(), _queue.get_remaining_this_round(), _queue.get_next_round_preview())
-	var actor := _queue.get_current_actor()
-	_round_label.text = "Ronda %d · Turno de %s" % [_queue.get_round_number(), actor.display_name if actor else "-"]
+	var queue := _session.get_queue()
+	_bar.display(queue.get_current_actor(), queue.get_remaining_this_round(), queue.get_next_round_preview())
+	var actor := queue.get_current_actor()
+	_round_label.text = "Ronda %d · Turno de %s" % [queue.get_round_number(), actor.display_name if actor else "-"]
 	var lines: PackedStringArray = []
 	for combatant in _combatants:
 		lines.append(_describe_resources(combatant))
 	_speeds_label.text = "\n".join(lines)
-	_formation_label.text = "Aliados — %s\nEnemigos — %s" % [_describe_formation(_allies), _describe_formation(_enemies)]
+	_formation_label.text = "Aliados — %s\nEnemigos — %s" % [
+		_describe_formation(_session.get_allies()), _describe_formation(_session.get_enemies())]
 	_targets_label.text = _describe_targets(actor)
 
 
@@ -216,8 +180,8 @@ func _describe_formation(formation: Formation) -> String:
 func _describe_targets(actor: Combatant) -> String:
 	if actor == null:
 		return ""
-	var own_side := _allies if actor.is_ally else _enemies
-	var other_side := _enemies if actor.is_ally else _allies
+	var own_side := _session.get_allies() if actor.is_ally else _session.get_enemies()
+	var other_side := _session.get_enemies() if actor.is_ally else _session.get_allies()
 	var lines: PackedStringArray = ["Objetivos válidos de %s:" % actor.display_name]
 	for skill in actor.skills:
 		var options: PackedStringArray = []
