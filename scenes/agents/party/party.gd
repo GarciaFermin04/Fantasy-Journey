@@ -37,13 +37,31 @@ func _physics_process(_delta: float) -> void:
 
 
 ## Enables or disables exploration: player control of the leader and the
-## followers walking behind it. Disabled, everyone stays where they are.
+## followers walking behind it. Disabled, members stop moving on their own
+## so other systems (like combat) can move them.
 func set_exploration_enabled(enabled: bool) -> void:
 	leader.set_controls_enabled(enabled)
+	leader.set_physics_process(enabled)
 	_following_enabled = enabled
-	if not enabled:
-		for follower in followers:
-			follower.set_follow_target(follower.global_position)
+	for follower in followers:
+		follower.set_follow_target(follower.global_position)
+		follower.set_physics_process(enabled)
+
+
+## Returns the party members: the leader first, then the followers in order.
+func get_members() -> Array[Node3D]:
+	var members: Array[Node3D] = [leader]
+	for follower in followers:
+		members.append(follower)
+	return members
+
+
+## Returns the recruit of each member, in the same order as [method get_members].
+func get_member_recruits() -> Array[RecruitData]:
+	var recruits: Array[RecruitData] = [leader.recruit]
+	for follower in followers:
+		recruits.append(follower.recruit)
+	return recruits
 
 
 func _distance_for(index: int) -> float:

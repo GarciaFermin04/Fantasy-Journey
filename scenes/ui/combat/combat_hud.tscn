@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/combat/combat_hud.gd" id="1_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/combat/turn_order_bar.tscn" id="2_bar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/combat/combat_command_panel.tscn" id="3_panel"]
+
+[node name="CombatHud" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="TurnOrderBar" parent="Margin" instance=ExtResource("2_bar")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Bottom" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Info" type="PanelContainer" parent="Margin/Bottom"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="InfoMargin" type="MarginContainer" parent="Margin/Bottom/Info"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="Margin/Bottom/Info/InfoMargin"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="Margin/Bottom/Info/InfoMargin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+
+[node name="LogLabel" type="Label" parent="Margin/Bottom/Info/InfoMargin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+autowrap_mode = 3
+
+[node name="CombatCommandPanel" parent="Margin/Bottom" instance=ExtResource("3_panel")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8

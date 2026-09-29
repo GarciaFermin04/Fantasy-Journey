@@ -48,7 +48,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
   - La fila delantera recibe más ataques: pesa el doble para los enemigos que eligen al azar.
 - [~] **3.8 Transición sin corte** — Tocar enemigo, la cámara enfoca la sala, aparece la UI y las unidades se acomodan.
   - [x] 3.8a Enemigos visibles en la sala; al tocar uno se suman los cercanos (radio) y se congela la exploración.
-  - [ ] 3.8b Arena alrededor del choque (izquierda/derecha en pantalla), controlador de combate, cámara de combate y HUD.
+  - [x] 3.8b Arena alrededor del choque (izquierda/derecha en pantalla), controlador de combate, cámara de combate y HUD.
   - [ ] 3.8c Fin del combate: victoria (vuelve la exploración) o derrota (recarga la sala); números de daño.
 - [ ] **3.9 Sorpresa y emboscada** — Atacar por la espalda da ventaja. Ser emboscado da el primer turno al enemigo.
 

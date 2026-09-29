@@ -12,6 +12,7 @@
 [ext_resource type="Resource" path="res://data/enemies/common/slime.tres" id="10_slime"]
 [ext_resource type="Resource" path="res://data/enemies/common/skeleton.tres" id="11_skeleton"]
 [ext_resource type="Resource" path="res://data/enemies/common/imp.tres" id="12_imp"]
+[ext_resource type="PackedScene" path="res://scenes/combat/combat_controller.tscn" id="13_combat"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5xg5r"]
 
@@ -126,3 +127,6 @@ offset_right = 616.0
 offset_bottom = 48.0
 theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
 theme_override_font_sizes/font_size = 22
+
+[node name="CombatController" parent="." instance=ExtResource("13_combat")]
+unique_name_in_owner = true
