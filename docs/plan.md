@@ -50,7 +50,7 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
   - [x] 3.8a Enemigos visibles en la sala; al tocar uno se suman los cercanos (radio) y se congela la exploración.
   - [x] 3.8b Arena alrededor del choque (izquierda/derecha en pantalla), controlador de combate, cámara de combate y HUD.
   - [x] 3.8c Fin del combate: victoria (vuelve la exploración) o derrota (recarga la sala); números de daño.
-- [ ] **3.9 Sorpresa y emboscada** — Atacar por la espalda da ventaja. Ser emboscado da el primer turno al enemigo.
+- ~~**3.9 Sorpresa y emboscada** — Atacar por la espalda da ventaja. Ser emboscado da el primer turno al enemigo.~~ Descartada (ver `docs/decisiones/017-sin-emboscadas.md`).
 
 ## Etapa 4: Primer piso de la Torre (~40 h)
 **Lista cuando:** jugás un piso completo con salas variables, loot temporal y un jefe al final.

@@ -115,8 +115,7 @@ Los enemigos serán visibles en el mapa o aparecerán mediante eventos. Al entra
 ## Inicio de Encuentros
 _Enemigos visibles, salas y eventos_
 
-Los combates pueden comenzar al tocar un enemigo, entrar en su rango, activar una sala, abrir un cofre, pisar una trampa o iniciar un evento. Si el jugador sorprende al enemigo, puede obtener ventaja inicial. Si el enemigo embosca al grupo, puede actuar primero o aplicar una penalización.
-
+Los combates pueden comenzar al tocar un enemigo, entrar en su rango, activar una sala, abrir un cofre, pisar una trampa o iniciar un evento.
 ## Progresión Permanente
 _Lo que se conserva entre runs_
 
