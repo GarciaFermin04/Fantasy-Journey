@@ -15,6 +15,7 @@ const _WORLD_LAYER: int = 1
 const _SIDE_LEFT: float = -1.0
 const _SIDE_RIGHT: float = 1.0
 const _IDLE_CAMERA_PRIORITY: int = 0
+const _DEBUG_TOGGLE_VIEW_KEY: Key = KEY_F2
 
 ## Balance numbers of the combat.
 @export var combat_rules: CombatRules
@@ -47,11 +48,32 @@ const _IDLE_CAMERA_PRIORITY: int = 0
 ## Message shown on defeat.
 @export var defeat_text: String = "Derrota..."
 
+@export_group("POV camera")
+## Whether combats start with the low camera behind the allies (when there is room).
+@export var start_with_pov: bool = true
+## Distance from the arena center to the low camera, on the allies' side, in meters.
+@export var pov_distance: float = 9.0
+## Height of the low camera, in meters.
+@export var pov_height: float = 3.6
+## Sideways offset of the low camera towards the viewer, in meters.
+@export var pov_lateral: float = 4.5
+## How far past the center, towards the enemies, the low camera looks, in meters.
+@export var pov_look_lead: float = 1.5
+## Height of the point the low camera looks at, in meters.
+@export var pov_look_height: float = 0.2
+## Message shown when a combat starts and both views are available.
+@export var start_text_with_views: String = "¡Comienza el combate! (F2: cambiar cámara)"
+## Message shown when a combat starts and only the wide view fits.
+@export var start_text: String = "¡Comienza el combate!"
+
 var _session: CombatSession = null
 var _nodes: Dictionary[Combatant, Node3D] = {}
 var _rng := RandomNumberGenerator.new()
+var _pov_available: bool = false
+var _using_pov: bool = false
 
 @onready var _camera: PhantomCamera3D = %CombatCamera
+@onready var _pov_camera: PhantomCamera3D = %PovCamera
 @onready var _hud: CombatHud = %CombatHud
 @onready var _enemy_turn_timer: Timer = %EnemyTurnTimer
 
@@ -62,6 +84,15 @@ func _ready() -> void:
 	_rng.randomize()
 	_hud.action_confirmed.connect(_on_action_confirmed)
 	_enemy_turn_timer.timeout.connect(_on_enemy_turn_timer_timeout)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	var key := event as InputEventKey
+	if _session == null or key == null or not key.pressed or key.echo:
+		return
+	if key.keycode == _DEBUG_TOGGLE_VIEW_KEY and _pov_available:
+		get_viewport().set_input_as_handled()
+		_set_view(not _using_pov)
 
 
 ## Starts a combat between [param party] and [param room_enemies] around
@@ -75,14 +106,44 @@ func start_combat(party: Party, room_enemies: Array[RoomEnemy], center: Vector3,
 	_place_side(allies, center, ally_side)
 	_place_side(enemies, center, -ally_side)
 	_camera.global_position = center + camera_offset
-	_camera.priority = combat_camera_priority
+	_pov_available = _place_pov_camera(center, ally_side)
+	_set_view(start_with_pov and _pov_available)
 	_session = CombatSession.new(combat_rules)
 	_session.turn_started.connect(_on_turn_started)
 	_session.action_performed.connect(_on_action_performed)
 	_session.combat_finished.connect(_on_combat_finished)
-	_hud.show_log("¡Comienza el combate!")
+	_hud.show_log(start_text_with_views if _pov_available else start_text)
 	_hud.show()
 	_session.start(allies, enemies)
+
+
+func _place_pov_camera(center: Vector3, ally_side: float) -> bool:
+	var camera_point := ArenaLayout.get_pov_camera_position(center, ally_side, pov_distance, pov_height, pov_lateral)
+	var target := ArenaLayout.get_pov_look_target(center, ally_side, pov_look_lead, pov_look_height)
+	if not _has_clear_view(target, camera_point):
+		return false
+	_pov_camera.look_at_from_position(camera_point, target, Vector3.UP)
+	return true
+
+
+func _has_clear_view(from: Vector3, to: Vector3) -> bool:
+	var ray := PhysicsRayQueryParameters3D.create(from, to, _WORLD_LAYER)
+	var space := get_world_3d().direct_space_state
+	if not space.intersect_ray(ray).is_empty():
+		return false
+	var room := SphereShape3D.new()
+	room.radius = unit_radius
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = room
+	query.collision_mask = _WORLD_LAYER
+	query.transform = Transform3D(Basis.IDENTITY, to)
+	return space.intersect_shape(query, 1).is_empty()
+
+
+func _set_view(use_pov: bool) -> void:
+	_using_pov = use_pov
+	_pov_camera.priority = combat_camera_priority if use_pov else _IDLE_CAMERA_PRIORITY
+	_camera.priority = _IDLE_CAMERA_PRIORITY if use_pov else combat_camera_priority
 
 
 func _build_allies(party: Party) -> Array[Combatant]:
@@ -123,14 +184,14 @@ func _move_to(node: Node3D, target: Vector3) -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 
-func _is_free(position: Vector3) -> bool:
+func _is_free(point: Vector3) -> bool:
 	var shape := CapsuleShape3D.new()
 	shape.radius = unit_radius
 	shape.height = _UNIT_HEIGHT
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
 	query.collision_mask = _WORLD_LAYER
-	query.transform = Transform3D(Basis.IDENTITY, position + Vector3.UP * (_UNIT_HEIGHT / 2.0 + unit_radius))
+	query.transform = Transform3D(Basis.IDENTITY, point + Vector3.UP * (_UNIT_HEIGHT / 2.0 + unit_radius))
 	return get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
 
 
@@ -187,6 +248,7 @@ func _on_combat_finished(result: CombatStateMachine.Result) -> void:
 	await get_tree().create_timer(end_delay).timeout
 	_hud.hide()
 	_camera.priority = _IDLE_CAMERA_PRIORITY
+	_pov_camera.priority = _IDLE_CAMERA_PRIORITY
 	var defeated_enemies: Array[RoomEnemy] = []
 	for combatant in _nodes:
 		var node := _nodes[combatant]

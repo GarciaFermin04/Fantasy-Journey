@@ -37,6 +37,22 @@ func test_zero_count_gives_no_slots() -> void:
 	assert_eq(_slots(LEFT, CombatRow.Row.FRONT, 0).size(), 0)
 
 
+func test_pov_camera_stands_behind_its_side() -> void:
+	var position := ArenaLayout.get_pov_camera_position(Vector3(10.0, 0.0, 5.0), LEFT, 6.5, 2.2, 3.0)
+	assert_almost_eq(position, Vector3(3.5, 2.2, 8.0), TOLERANCE)
+
+
+func test_pov_camera_looks_towards_the_other_side() -> void:
+	var target := ArenaLayout.get_pov_look_target(Vector3(10.0, 0.0, 5.0), LEFT, 1.5, 0.8)
+	assert_almost_eq(target, Vector3(11.5, 0.8, 5.0), TOLERANCE)
+
+
+func test_pov_camera_mirrors_for_right_side() -> void:
+	var center := Vector3(10.0, 0.0, 5.0)
+	assert_almost_eq(ArenaLayout.get_pov_camera_position(center, RIGHT, 6.5, 2.2, 3.0), Vector3(16.5, 2.2, 8.0), TOLERANCE)
+	assert_almost_eq(ArenaLayout.get_pov_look_target(center, RIGHT, 1.5, 0.8), Vector3(8.5, 0.8, 5.0), TOLERANCE)
+
+
 func test_free_slot_is_unchanged() -> void:
 	var slot := Vector3(4.0, 0.0, 0.0)
 	var result := ArenaLayout.resolve_slot(slot, Vector3.ZERO, 0.25, func(_p: Vector3) -> bool: return true)

@@ -51,6 +51,9 @@ Estados: [x] hecho · [~] en curso · [ ] pendiente. Actualizar al terminar cada
   - [x] 3.8b Arena alrededor del choque (izquierda/derecha en pantalla), controlador de combate, cámara de combate y HUD.
   - [x] 3.8c Fin del combate: victoria (vuelve la exploración) o derrota (recarga la sala); números de daño.
 - ~~**3.9 Sorpresa y emboscada** — Atacar por la espalda da ventaja. Ser emboscado da el primer turno al enemigo.~~ Descartada (ver `docs/decisiones/017-sin-emboscadas.md`).
+- [x] **3.10 Prueba de cámara de combate tipo ORAS** — Vista baja detrás de los aliados mirando a los enemigos (como Pokémon Omega Ruby), con placeholders. Tecla de depuración para alternar con la vista amplia y comparar. Si no hay espacio en la sala para esa cámara, se usa la vista amplia.
+  - Hecha: F2 alterna vistas en combate; arranca en la vista tipo ORAS si hay lugar (ver `docs/decisiones/018-camara-tipo-oras.md`).
+  - Pendiente de decidir jugándolo: si reemplaza a la vista amplia o conviven, planos de acción (atacante/objetivo), criterios por tipo de combate (comunes rápidos, jefes y eventos cinemáticos), opción del jugador y sprites de espalda.
 
 ## Etapa 4: Primer piso de la Torre (~40 h)
 **Lista cuando:** jugás un piso completo con salas variables, loot temporal y un jefe al final.

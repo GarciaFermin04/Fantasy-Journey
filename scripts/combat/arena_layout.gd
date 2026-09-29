@@ -20,6 +20,20 @@ static func get_row_slots(center: Vector3, side: float, row: CombatRow.Row, coun
 	return result
 
 
+## Returns the position of a low "over the shoulder" camera behind the side at
+## [param side] (-1 left, +1 right): [param distance] meters from the center on
+## that side, [param height] meters up and [param lateral] meters towards +Z
+## (the viewer), so it looks across the arena diagonally.
+static func get_pov_camera_position(center: Vector3, side: float, distance: float, height: float, lateral: float) -> Vector3:
+	return center + Vector3(side * distance, height, lateral)
+
+
+## Returns the point that camera looks at: [param lead] meters from the center
+## towards the opposite side, at [param height] meters.
+static func get_pov_look_target(center: Vector3, side: float, lead: float, height: float) -> Vector3:
+	return center + Vector3(-side * lead, height, 0.0)
+
+
 ## Returns [param slot] if [param is_free] says it is free; otherwise moves it
 ## towards [param center] in steps of [param step] meters until a free
 ## position is found or the center is reached. [param is_free] receives a
